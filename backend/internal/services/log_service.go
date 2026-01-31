@@ -1,7 +1,6 @@
 package services
 
-import (
-	"context"
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -71,19 +70,19 @@ func (s *LogService) CreateOrUpdateLog(ctx context.Context, userID uuid.UUID, re
 	if req.Completed && !wasCompletedBefore {
 		// Habit was completed, update streak
 		if err := s.streakRepo.UpdateStreakAfterCompletion(ctx, req.HabitID, logDate); err != nil {
-			// Log error but don't fail the request
+			log.Printf("failed to update streak for habit %s: %v", req.HabitID, err)
 		}
 
 		// Award XP
 		if err := s.gamificationSvc.AwardHabitCompletionXP(ctx, userID, req.HabitID, false); err != nil {
-			// Log error but don't fail
+			log.Printf("failed to award habit completion XP to user %s: %v", userID, err)
 		}
 	}
 
 	// Award XP for learning note if new
 	if req.LearningNote != nil && *req.LearningNote != "" && (existingLog == nil || existingLog.LearningNote == nil || *existingLog.LearningNote == "") {
 		if err := s.gamificationSvc.AwardLearningNoteXP(ctx, userID, log.ID); err != nil {
-			// Log error
+			log.Printf("failed to award learning note XP to user %s: %v", userID, err)
 		}
 	}
 

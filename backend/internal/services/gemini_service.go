@@ -82,7 +82,10 @@ func (s *GeminiService) GenerateMonthlyReport(ctx context.Context, input *models
 
 // buildReportPrompt builds the prompt for report generation
 func (s *GeminiService) buildReportPrompt(input *models.ReportGenerationInput) string {
-	habitsJSON, _ := json.MarshalIndent(input.Habits, "", "  ")
+	habitsJSON, err := json.MarshalIndent(input.Habits, "", "  ")
+	if err != nil {
+		habitsJSON = []byte("[]")
+	}
 
 	return fmt.Sprintf(`You are an AI assistant for a habit tracking app. Generate a monthly progress report based on the following data.
 

@@ -1,79 +1,35 @@
-# Implementation Plan: Habit Tracker App Release
+# CI Workflow Resolution Plan
 
-## Goal
-Release a production-ready Habit Tracker app with complete authentication (Google Sign-In, OTP, Password), deployed backend, and distributable APK.
-
-## User Review Required
-
-> [!IMPORTANT]
-> **Deployment Decision Required**
-> - **Option A (Recommended)**: Supabase (Database + Auth) + Render (Go Backend for AI features)
->   - Pros: Keep existing Go code, full control over AI logic
->   - Cons: Need to maintain two services
-> 
-> - **Option B (Simpler)**: Supabase Only (Database + Auth + Edge Functions)
->   - Pros: Single platform, fully serverless, easier maintenance
->   - Cons: Need to rewrite Go AI logic in TypeScript
->
-> **Recommendation**: Start with Option A, can migrate to Option B later if needed.
-
-> [!WARNING]
-> **Google Play Store**
-> - Requires $25 one-time developer fee
-> - Alternative: Distribute APK directly via GitHub releases or website
-> - Which distribution method do you prefer?
-
----
+This plan addresses the ongoing CI failures in the GitHub Actions pipeline for both the Go backend and the Flutter app.
 
 ## Proposed Changes
 
-### Component 1: Supabase Setup & Database Schema
+### Backend (Go)
 
-See [RELEASE_PLAN.md](file:///C:/Users/admin/Desktop/habittracker/RELEASE_PLAN.md) for complete Supabase setup instructions and SQL schema.
+- **[MODIFY] [report_service.go](file:///C:/Users/admin/Desktop/habittracker/backend/internal/services/report_service.go)**
+    - Add error checking for all `json.Marshal` calls in `RegenerateReport`.
+    - Fix `SA9003`: Add logging to the empty error branch in `GenerateReport`'s `CreateRevisionHabitsFromReport` call.
+- **[MODIFY] [log_service.go](file:///C:/Users/admin/Desktop/habittracker/backend/internal/services/log_service.go)**
+    - Fix `SA9003`: Add logging to empty error branches in `CreateOrUpdateLog`.
+- **[MODIFY] [notification_service.go](file:///C:/Users/admin/Desktop/habittracker/backend/internal/services/notification_service.go)**
+    - Remove `fmt.Printf` in `sendFCMNotification` (replaced with a no-op as it's a mock) to satisfy linter rules against console output.
+- **[MODIFY] [gemini_service.go](file:///C:/Users/admin/Desktop/habittracker/backend/internal/services/gemini_service.go)**
+    - Add error checking for `json.MarshalIndent` in `buildReportPrompt`.
 
----
+### Flutter (Dart)
 
-### Component 2: Flutter App - Authentication Implementation
-
-#### [MODIFY] [auth_provider.dart](file:///c:/Users/admin/Desktop/habittracker/app/lib/presentation/providers/auth_provider.dart)
-Implement Supabase authentication with Google Sign-In, Email/Password, and OTP.
-
-#### [MODIFY] [login_screen.dart](file:///c:/Users/admin/Desktop/habittracker/app/lib/presentation/screens/auth/login_screen.dart)
-Add complete login UI with all authentication methods.
-
-#### [MODIFY] [register_screen.dart](file:///c:/Users/admin/Desktop/habittracker/app/lib/presentation/screens/auth/register_screen.dart)
-Add registration UI with email verification.
-
----
-
-### Component 3: Backend Integration
-
-#### [MODIFY] [habit_provider.dart](file:///c:/Users/admin/Desktop/habittracker/app/lib/presentation/providers/habit_provider.dart)
-Replace mock data with Supabase API calls.
-
-#### [NEW] [supabase_repository.dart](file:///c:/Users/admin/Desktop/habittracker/app/lib/data/remote/supabase_repository.dart)
-Create repository for all Supabase operations.
-
----
-
-### Component 4: APK Build
-
-#### [NEW] [build-apk.bat](file:///C:/Users/admin/Desktop/habittracker/build-apk.bat)
-Windows batch script to build release APK.
-
----
+- **[MODIFY] [widget_test.dart](file:///C:/Users/admin/Desktop/habittracker/app/test/widget_test.dart)**
+    - Replace the outdated boilerplate counter test with a valid sanity test for `HabitTrackerApp`.
+- **[MODIFY] [notification_service.dart](file:///C:/Users/admin/Desktop/habittracker/app/lib/core/services/notification_service.dart)**
+    - Replace `print` calls with `debugPrint` for linter compliance.
+- **[MODIFY] [api_client.dart](file:///C:/Users/admin/Desktop/habittracker/app/lib/data/remote/api_client.dart)**
+    - Replace `print` calls with `debugPrint` in interceptors and error handlers.
 
 ## Verification Plan
 
-### Manual Testing
-1. Test all authentication methods (Google, Email/Password, OTP)
-2. Test habit CRUD operations
-3. Test offline functionality
-4. Install and test APK on Android device
+### Automated Tests
+- Run `go build ./...` and `go vet ./...` in the backend directory.
+- (Recommended) User should run `flutter test` and `flutter analyze` locally after my changes to confirm resolution before pushing if possible.
 
-### Performance
-- App startup < 3 seconds
-- API response < 500ms
-- APK size < 50MB
-
-See [RELEASE_PLAN.md](file:///C:/Users/admin/Desktop/habittracker/RELEASE_PLAN.md) for complete verification steps.
+### Manual Verification
+- After pushing, monitor GitHub Actions to ensure both `Backend Tests` and `Flutter Tests` jobs turn green.

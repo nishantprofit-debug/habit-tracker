@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/api_endpoints.dart';
@@ -43,15 +44,15 @@ class ApiClient {
             options.headers['Authorization'] = 'Bearer $_accessToken';
           }
 
-          print('REQUEST[${options.method}] => PATH: ${options.path}');
+          debugPrint('REQUEST[${options.method}] => PATH: ${options.path}');
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          print('RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+          debugPrint('RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
           return handler.next(response);
         },
         onError: (error, handler) async {
-          print('ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}');
+          debugPrint('ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}');
 
           // Handle 401 - Token expired
           if (error.response?.statusCode == 401) {
@@ -104,7 +105,7 @@ class ApiClient {
         return true;
       }
     } catch (e) {
-      print('Token refresh failed: $e');
+      debugPrint('Token refresh failed: $e');
     }
 
     return false;

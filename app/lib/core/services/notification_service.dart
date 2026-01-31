@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Notification Service for handling push and local notifications
@@ -44,12 +45,12 @@ class NotificationService {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      debugPrint('User granted permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      debugPrint('User granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      debugPrint('User declined or has not accepted permission');
     }
   }
 
@@ -107,7 +108,7 @@ class NotificationService {
 
   /// Handle foreground message
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
-    print('Received foreground message: ${message.messageId}');
+    debugPrint('Received foreground message: ${message.messageId}');
 
     // Show local notification
     await showLocalNotification(
@@ -119,7 +120,7 @@ class NotificationService {
 
   /// Handle message tap
   void _handleMessageTap(RemoteMessage message) {
-    print('Message tapped: ${message.messageId}');
+    debugPrint('Message tapped: ${message.messageId}');
     // Navigate to appropriate screen based on message data
     final data = message.data;
     final screen = data['screen'];
@@ -140,7 +141,7 @@ class NotificationService {
 
   /// Handle local notification tap
   void _onNotificationTapped(NotificationResponse response) {
-    print('Local notification tapped: ${response.payload}');
+    debugPrint('Local notification tapped: ${response.payload}');
     // TODO: Handle navigation based on payload
   }
 

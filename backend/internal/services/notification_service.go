@@ -84,9 +84,7 @@ func (s *NotificationService) SendNotification(ctx context.Context, userID uuid.
 
 // sendFCMNotification sends a notification via FCM
 func (s *NotificationService) sendFCMNotification(token, title, body string, data map[string]string) error {
-	// For development/testing, just log the notification
-	// In production, implement actual FCM sending
-	fmt.Printf("FCM Notification - Token: %s, Title: %s, Body: %s\n", token[:20]+"...", title, body)
+	// For development/testing, implement actual FCM sending in production
 	return nil
 }
 

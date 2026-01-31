@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -130,7 +131,7 @@ func (s *ReportService) GenerateReport(ctx context.Context, userID uuid.UUID, ye
 	// Create revision habits from suggestions
 	if len(reportContent.RevisionSuggestions) > 0 {
 		if err := s.reportRepo.CreateRevisionHabitsFromReport(ctx, userID, reportMonth, reportContent.RevisionSuggestions); err != nil {
-			// Log error but don't fail
+			log.Printf("failed to create revision habits for user %s: %v", userID, err)
 		}
 	}
 
@@ -197,13 +198,22 @@ func (s *ReportService) RegenerateReport(ctx context.Context, userID uuid.UUID, 
 			return nil, err
 		}
 
-		contentJSON, _ := json.Marshal(reportContent)
-		suggestionsJSON, _ := json.Marshal(reportContent.RevisionSuggestions)
+		contentJSON, err := json.Marshal(reportContent)
+		if err != nil {
+			return nil, err
+		}
+		suggestionsJSON, err := json.Marshal(reportContent.RevisionSuggestions)
+		if err != nil {
+			return nil, err
+		}
 		habitsPercentage := make(map[string]float64)
 		for _, habit := range habitData {
 			habitsPercentage[habit.HabitID.String()] = habit.CompletionRate
 		}
-		habitsPercentageJSON, _ := json.Marshal(habitsPercentage)
+		habitsPercentageJSON, err := json.Marshal(habitsPercentage)
+		if err != nil {
+			return nil, err
+		}
 
 		existing.ReportContent = contentJSON
 		existing.SkillsLearned = reportContent.SkillsLearned
