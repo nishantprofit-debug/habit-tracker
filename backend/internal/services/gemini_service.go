@@ -277,10 +277,3 @@ func (s *GeminiService) generateMockReport(input *models.ReportGenerationInput) 
 		MotivationalNote:    "Every day you show up is a win. Keep building those positive habits!",
 	}
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
