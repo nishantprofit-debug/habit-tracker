@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: habittracker-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-habittracker}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-habittracker_secret}
+      POSTGRES_DB: ${DB_NAME:-habittracker}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-habittracker} -d ${DB_NAME:-habittracker}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - habittracker-network
+    restart: unless-stopped
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: habittracker-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - habittracker-network
+    restart: unless-stopped
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: habittracker-backend
+    environment:
+      - APP_ENV=${APP_ENV:-development}
+      - APP_PORT=8080
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-habittracker}
+      - DB_PASSWORD=${DB_PASSWORD:-habittracker_secret}
+      - DB_NAME=${DB_NAME:-habittracker}
+      - DB_SSL_MODE=disable
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      - JWT_EXPIRY_HOURS=${JWT_EXPIRY_HOURS:-24}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-your-firebase-project-id}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - FCM_SERVER_KEY=${FCM_SERVER_KEY:-}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - habittracker-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy (optional, for production)
+  nginx:
+    image: nginx:alpine
+    container_name: habittracker-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+    networks:
+      - habittracker-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  habittracker-network:
+    driver: bridge

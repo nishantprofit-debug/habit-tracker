@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>AI Habit Tracker Project Report</title>
+  <style>
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+background-color: #1a1a1a;
+border: none;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">AI Habit Tracker Project Report</h1>
+</header>
+<h1 id="ai-powered-habit-tracker-app---project-report">AI-Powered Habit
+Tracker App - Project Report</h1>
+<p><strong>Document Version:</strong> 1.0<br />
+<strong>Date:</strong> December 2024<br />
+<strong>Purpose:</strong> Technical specification for development using
+Claude Code</p>
+<hr />
+<h2 id="project-overview">1. Project Overview</h2>
+<h3 id="app-name">1.1 App Name</h3>
+<p>AI Habit Tracker (working title)</p>
+<h3 id="description">1.2 Description</h3>
+<p>A mobile application that helps users track daily habits, log what
+they learn, and receive AI-generated monthly reports with insights and
+revision suggestions. The app works offline and syncs when online.</p>
+<h3 id="problem-statement">1.3 Problem Statement</h3>
+<p>Users want to: - Track multiple habits daily (gym, wake up early,
+study DSA, read articles) - Log what they learned in one line - Get
+monthly AI-generated reports showing progress and skill improvements -
+Receive smart revision suggestions (e.g., “You learned Java last month,
+revise it for 7 days”)</p>
+<h3 id="target-platforms">1.4 Target Platforms</h3>
+<ul>
+<li>iOS (App Store)</li>
+<li>Android (Play Store)</li>
+</ul>
+<hr />
+<h2 id="features">2. Features</h2>
+<h3 id="mvp-features-version-1">2.1 MVP Features (Version 1)</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>User Authentication</td>
+<td>Sign up / Login using Firebase Auth (Email, Google, Apple)</td>
+</tr>
+<tr class="even">
+<td>Habit CRUD</td>
+<td>Create, Read, Update, Delete habits</td>
+</tr>
+<tr class="odd">
+<td>Daily Check-in</td>
+<td>Mark habit as done/not done + add one-liner learning note (text
+only)</td>
+</tr>
+<tr class="even">
+<td>Push Notifications</td>
+<td>Reminders for habits (morning/evening configurable)</td>
+</tr>
+<tr class="odd">
+<td>Monthly AI Report</td>
+<td>Gemini-powered report showing progress, skills learned,
+improvements</td>
+</tr>
+<tr class="even">
+<td>Revision Suggestions</td>
+<td>AI suggests revision habits based on past completed learning</td>
+</tr>
+<tr class="odd">
+<td>Offline Support</td>
+<td>App works offline, syncs data when online</td>
+</tr>
+<tr class="even">
+<td>Streak Tracking</td>
+<td>Track consecutive days of habit completion</td>
+</tr>
+</tbody>
+</table>
+<h3 id="future-features-post-mvp">2.2 Future Features (Post-MVP)</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Voice Input</td>
+<td>Voice-to-text for logging learning notes</td>
+</tr>
+<tr class="even">
+<td>AI Follow-up Questions</td>
+<td>Daily AI questions based on habits (optional)</td>
+</tr>
+<tr class="odd">
+<td>Admin Panel</td>
+<td>Web dashboard to manage pricing/subscriptions</td>
+</tr>
+<tr class="even">
+<td>Freemium Model</td>
+<td>Free tier + paid AI features</td>
+</tr>
+<tr class="odd">
+<td>Weekly Reports</td>
+<td>Shorter weekly summaries</td>
+</tr>
+<tr class="even">
+<td>Social Features</td>
+<td>Share progress with friends</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tech-stack">3. Tech Stack</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 42%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mobile App</td>
+<td>Flutter</td>
+<td>Cross-platform iOS &amp; Android</td>
+</tr>
+<tr class="even">
+<td>State Management</td>
+<td>Riverpod or Bloc</td>
+<td>App state management</td>
+</tr>
+<tr class="odd">
+<td>Local Database</td>
+<td>SQLite (sqflite)</td>
+<td>Offline data storage</td>
+</tr>
+<tr class="even">
+<td>Backend API</td>
+<td>Golang</td>
+<td>REST API server</td>
+</tr>
+<tr class="odd">
+<td>Backend Framework</td>
+<td>Gin or Echo</td>
+<td>HTTP router for Golang</td>
+</tr>
+<tr class="even">
+<td>Database</td>
+<td>PostgreSQL</td>
+<td>Primary database</td>
+</tr>
+<tr class="odd">
+<td>Hosting</td>
+<td>Railway</td>
+<td>Backend + Database hosting</td>
+</tr>
+<tr class="even">
+<td>Authentication</td>
+<td>Firebase Auth</td>
+<td>User authentication</td>
+</tr>
+<tr class="odd">
+<td>Push Notifications</td>
+<td>Firebase Cloud Messaging (FCM)</td>
+<td>Push notifications</td>
+</tr>
+<tr class="even">
+<td>AI Integration</td>
+<td>Gemini API</td>
+<td>Monthly report generation</td>
+</tr>
+<tr class="odd">
+<td>CI/CD</td>
+<td>GitHub Actions + Fastlane</td>
+<td>Automated builds and deployments</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="system-architecture">4. System Architecture</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│                        MOBILE APP (Flutter)                          │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
+│  │   Screens   │  │   Bloc/     │  │  Repository │  │   SQLite    │ │
+│  │   &amp; UI      │◄►│  Riverpod   │◄►│   Layer     │◄►│  (Offline)  │ │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘ │
+│                                            │                         │
+│                                            ▼                         │
+│                                    ┌─────────────┐                   │
+│                                    │  Sync Engine│                   │
+│                                    │  (Online)   │                   │
+│                                    └─────────────┘                   │
+└─────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         ▼
+                              ┌─────────────────────┐
+                              │   Firebase Auth     │
+                              │   (Authentication)  │
+                              └─────────────────────┘
+                                         │
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         RAILWAY (Cloud)                              │
+│                                                                      │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │                    GOLANG BACKEND                            │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │    │
+│  │  │  Routes  │  │ Handlers │  │ Services │  │   Repo   │     │    │
+│  │  │  (API)   │─►│(Controllers)│─►│ (Logic) │─►│  (DB)   │     │    │
+│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘     │    │
+│  │                      │              │                        │    │
+│  │                      ▼              ▼                        │    │
+│  │              ┌──────────┐   ┌──────────┐                     │    │
+│  │              │  FCM     │   │  Gemini  │                     │    │
+│  │              │  Service │   │  Service │                     │    │
+│  │              └──────────┘   └──────────┘                     │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                              │                                       │
+│                              ▼                                       │
+│                    ┌─────────────────┐                              │
+│                    │   PostgreSQL    │                              │
+│                    │   Database      │                              │
+│                    └─────────────────┘                              │
+└─────────────────────────────────────────────────────────────────────┘</code></pre>
+<hr />
+<h2 id="database-schema-postgresql">5. Database Schema (PostgreSQL)</h2>
+<h3 id="tables">5.1 Tables</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Users Table</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> users (</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    firebase_uid <span class="dt">VARCHAR</span>(<span class="dv">128</span>) <span class="kw">UNIQUE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    email <span class="dt">VARCHAR</span>(<span class="dv">255</span>) <span class="kw">UNIQUE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    display_name <span class="dt">VARCHAR</span>(<span class="dv">100</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    timezone <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">DEFAULT</span> <span class="st">&#39;UTC&#39;</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    notification_enabled <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">true</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    morning_reminder_time <span class="dt">TIME</span> <span class="kw">DEFAULT</span> <span class="st">&#39;06:00:00&#39;</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    evening_reminder_time <span class="dt">TIME</span> <span class="kw">DEFAULT</span> <span class="st">&#39;21:00:00&#39;</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    fcm_token TEXT,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    updated_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">-- Habits Table</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> habits (</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    user_id UUID <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    title <span class="dt">VARCHAR</span>(<span class="dv">255</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    description TEXT,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">category</span> <span class="dt">VARCHAR</span>(<span class="dv">50</span>), <span class="co">-- learning, health, productivity, personal</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    frequency <span class="dt">VARCHAR</span>(<span class="dv">20</span>) <span class="kw">DEFAULT</span> <span class="st">&#39;daily&#39;</span>, <span class="co">-- daily, weekly</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    is_active <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">true</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    is_learning_habit <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">false</span>, <span class="co">-- true if requires learning log</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    updated_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">-- Daily Logs Table</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> daily_logs (</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    habit_id UUID <span class="kw">REFERENCES</span> habits(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    user_id UUID <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    log_date <span class="dt">DATE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    completed <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">false</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    learning_note TEXT, <span class="co">-- one-liner: &quot;What did you learn?&quot;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    completed_at <span class="dt">TIMESTAMP</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span>,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    updated_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span>,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNIQUE</span>(habit_id, log_date)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">-- Streaks Table (for tracking consecutive completions)</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> streaks (</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    habit_id UUID <span class="kw">REFERENCES</span> habits(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    user_id UUID <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    current_streak <span class="dt">INT</span> <span class="kw">DEFAULT</span> <span class="dv">0</span>,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    longest_streak <span class="dt">INT</span> <span class="kw">DEFAULT</span> <span class="dv">0</span>,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    last_completed_date <span class="dt">DATE</span>,</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    updated_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span>,</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNIQUE</span>(habit_id)</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co">-- Monthly Reports Table</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> reports (</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    user_id UUID <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    report_month <span class="dt">DATE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="co">-- first day of month (2024-01-01)</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    report_content JSONB <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="co">-- AI generated report</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    skills_learned TEXT[], <span class="co">-- array of skills</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    habits_completed_percentage JSONB, <span class="co">-- {&quot;habit_id&quot;: percentage}</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    revision_suggestions JSONB, <span class="co">-- suggested revision habits</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    generated_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span>,</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNIQUE</span>(user_id, report_month)</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="co">-- Revision Habits Table (AI suggested temporary habits)</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> revision_habits (</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>    user_id UUID <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    original_skill <span class="dt">VARCHAR</span>(<span class="dv">255</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="co">-- &quot;Java&quot;, &quot;DSA&quot;</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    source_month <span class="dt">DATE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="co">-- which month this skill was learned</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>    duration_days <span class="dt">INT</span> <span class="kw">DEFAULT</span> <span class="dv">7</span>,</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>    daily_duration_minutes <span class="dt">INT</span> <span class="kw">DEFAULT</span> <span class="dv">60</span>,</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>    status <span class="dt">VARCHAR</span>(<span class="dv">20</span>) <span class="kw">DEFAULT</span> <span class="st">&#39;pending&#39;</span>, <span class="co">-- pending, accepted, declined, completed</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="co">-- Sync Queue Table (for offline sync)</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> sync_queue (</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>    user_id UUID <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>    action <span class="dt">VARCHAR</span>(<span class="dv">20</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="co">-- create, update, delete</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    entity_type <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>, <span class="co">-- habit, daily_log</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    entity_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>    payload JSONB <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>    synced <span class="dt">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">false</span>,</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>    created_at <span class="dt">TIMESTAMP</span> <span class="kw">DEFAULT</span> <span class="fu">CURRENT_TIMESTAMP</span></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="co">-- Indexes for performance</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_habits_user_id <span class="kw">ON</span> habits(user_id);</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_daily_logs_user_date <span class="kw">ON</span> daily_logs(user_id, log_date);</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_daily_logs_habit_date <span class="kw">ON</span> daily_logs(habit_id, log_date);</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_reports_user_month <span class="kw">ON</span> reports(user_id, report_month);</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_sync_queue_user_synced <span class="kw">ON</span> sync_queue(user_id, synced);</span></code></pre></div>
+<hr />
+<h2 id="api-endpoints">6. API Endpoints</h2>
+<h3 id="authentication">6.1 Authentication</h3>
+<pre><code>POST   /api/v1/auth/register        - Register new user (after Firebase auth)
+POST   /api/v1/auth/login           - Login and get JWT token
+POST   /api/v1/auth/refresh         - Refresh JWT token
+PUT    /api/v1/auth/fcm-token       - Update FCM token for push notifications</code></pre>
+<h3 id="user">6.2 User</h3>
+<pre><code>GET    /api/v1/user/profile         - Get user profile
+PUT    /api/v1/user/profile         - Update user profile
+PUT    /api/v1/user/settings        - Update notification settings
+DELETE /api/v1/user/account         - Delete user account</code></pre>
+<h3 id="habits">6.3 Habits</h3>
+<pre><code>GET    /api/v1/habits               - Get all habits for user
+POST   /api/v1/habits               - Create new habit
+GET    /api/v1/habits/:id           - Get single habit
+PUT    /api/v1/habits/:id           - Update habit
+DELETE /api/v1/habits/:id           - Delete habit (soft delete)
+GET    /api/v1/habits/:id/streak    - Get streak info for habit</code></pre>
+<h3 id="daily-logs">6.4 Daily Logs</h3>
+<pre><code>GET    /api/v1/logs                 - Get logs (with date filters)
+GET    /api/v1/logs/today           - Get today&#39;s logs for all habits
+POST   /api/v1/logs                 - Create/Update daily log
+GET    /api/v1/logs/habit/:id       - Get logs for specific habit
+GET    /api/v1/logs/calendar/:month - Get calendar view data for month</code></pre>
+<h3 id="reports">6.5 Reports</h3>
+<pre><code>GET    /api/v1/reports              - Get all reports for user
+GET    /api/v1/reports/:month       - Get report for specific month
+POST   /api/v1/reports/generate     - Trigger report generation (cron or manual)</code></pre>
+<h3 id="revision-habits">6.6 Revision Habits</h3>
+<pre><code>GET    /api/v1/revisions            - Get revision suggestions
+PUT    /api/v1/revisions/:id/accept - Accept revision suggestion
+PUT    /api/v1/revisions/:id/decline- Decline revision suggestion</code></pre>
+<h3 id="sync">6.7 Sync</h3>
+<pre><code>POST   /api/v1/sync/push            - Push offline changes to server
+GET    /api/v1/sync/pull            - Pull latest data from server
+GET    /api/v1/sync/status          - Get sync status</code></pre>
+<hr />
+<h2 id="golang-backend-structure">7. Golang Backend Structure</h2>
+<pre><code>habit-tracker-api/
+├── cmd/
+│   └── server/
+│       └── main.go                 # Entry point
+├── internal/
+│   ├── config/
+│   │   └── config.go               # Environment configuration
+│   ├── database/
+│   │   ├── postgres.go             # PostgreSQL connection
+│   │   └── migrations/             # SQL migrations
+│   ├── middleware/
+│   │   ├── auth.go                 # Firebase JWT validation
+│   │   ├── cors.go                 # CORS middleware
+│   │   └── logging.go              # Request logging
+│   ├── models/
+│   │   ├── user.go
+│   │   ├── habit.go
+│   │   ├── daily_log.go
+│   │   ├── report.go
+│   │   └── revision.go
+│   ├── repository/
+│   │   ├── user_repo.go
+│   │   ├── habit_repo.go
+│   │   ├── log_repo.go
+│   │   └── report_repo.go
+│   ├── services/
+│   │   ├── auth_service.go
+│   │   ├── habit_service.go
+│   │   ├── log_service.go
+│   │   ├── report_service.go       # AI report generation
+│   │   ├── gemini_service.go       # Gemini API integration
+│   │   ├── notification_service.go # FCM push notifications
+│   │   └── sync_service.go         # Offline sync logic
+│   ├── handlers/
+│   │   ├── auth_handler.go
+│   │   ├── user_handler.go
+│   │   ├── habit_handler.go
+│   │   ├── log_handler.go
+│   │   ├── report_handler.go
+│   │   └── sync_handler.go
+│   └── routes/
+│       └── routes.go               # Route definitions
+├── pkg/
+│   ├── utils/
+│   │   ├── response.go             # API response helpers
+│   │   └── validator.go            # Input validation
+│   └── firebase/
+│       └── firebase.go             # Firebase Admin SDK
+├── go.mod
+├── go.sum
+├── Dockerfile
+└── .env.example</code></pre>
+<hr />
+<h2 id="flutter-app-structure">8. Flutter App Structure</h2>
+<pre><code>habit_tracker_app/
+├── lib/
+│   ├── main.dart                   # Entry point
+│   ├── app.dart                    # App configuration
+│   │
+│   ├── core/
+│   │   ├── constants/
+│   │   │   ├── app_colors.dart
+│   │   │   ├── app_strings.dart
+│   │   │   └── api_endpoints.dart
+│   │   ├── theme/
+│   │   │   └── app_theme.dart
+│   │   ├── utils/
+│   │   │   ├── date_utils.dart
+│   │   │   └── validators.dart
+│   │   └── errors/
+│   │       └── exceptions.dart
+│   │
+│   ├── data/
+│   │   ├── models/
+│   │   │   ├── user_model.dart
+│   │   │   ├── habit_model.dart
+│   │   │   ├── daily_log_model.dart
+│   │   │   └── report_model.dart
+│   │   ├── local/
+│   │   │   ├── database_helper.dart    # SQLite setup
+│   │   │   ├── habit_local_dao.dart
+│   │   │   ├── log_local_dao.dart
+│   │   │   └── sync_queue_dao.dart
+│   │   ├── remote/
+│   │   │   ├── api_client.dart         # HTTP client (Dio)
+│   │   │   ├── auth_api.dart
+│   │   │   ├── habit_api.dart
+│   │   │   ├── log_api.dart
+│   │   │   └── sync_api.dart
+│   │   └── repositories/
+│   │       ├── auth_repository.dart
+│   │       ├── habit_repository.dart
+│   │       ├── log_repository.dart
+│   │       └── sync_repository.dart
+│   │
+│   ├── domain/
+│   │   ├── entities/
+│   │   │   ├── user.dart
+│   │   │   ├── habit.dart
+│   │   │   └── daily_log.dart
+│   │   └── usecases/
+│   │       ├── get_habits.dart
+│   │       ├── complete_habit.dart
+│   │       └── generate_report.dart
+│   │
+│   ├── presentation/
+│   │   ├── blocs/ (or providers/)
+│   │   │   ├── auth/
+│   │   │   │   ├── auth_bloc.dart
+│   │   │   │   ├── auth_event.dart
+│   │   │   │   └── auth_state.dart
+│   │   │   ├── habit/
+│   │   │   │   └── habit_bloc.dart
+│   │   │   ├── log/
+│   │   │   │   └── log_bloc.dart
+│   │   │   └── sync/
+│   │   │       └── sync_bloc.dart
+│   │   │
+│   │   ├── screens/
+│   │   │   ├── splash/
+│   │   │   │   └── splash_screen.dart
+│   │   │   ├── auth/
+│   │   │   │   ├── login_screen.dart
+│   │   │   │   └── register_screen.dart
+│   │   │   ├── home/
+│   │   │   │   └── home_screen.dart      # Today&#39;s habits
+│   │   │   ├── habits/
+│   │   │   │   ├── habits_list_screen.dart
+│   │   │   │   ├── habit_detail_screen.dart
+│   │   │   │   └── add_habit_screen.dart
+│   │   │   ├── log/
+│   │   │   │   └── daily_log_screen.dart # Check-in + learning note
+│   │   │   ├── calendar/
+│   │   │   │   └── calendar_screen.dart  # Monthly view
+│   │   │   ├── reports/
+│   │   │   │   ├── reports_list_screen.dart
+│   │   │   │   └── report_detail_screen.dart
+│   │   │   ├── revisions/
+│   │   │   │   └── revision_suggestions_screen.dart
+│   │   │   └── settings/
+│   │   │       └── settings_screen.dart
+│   │   │
+│   │   └── widgets/
+│   │       ├── habit_card.dart
+│   │       ├── streak_badge.dart
+│   │       ├── progress_ring.dart
+│   │       ├── learning_note_input.dart
+│   │       └── sync_indicator.dart
+│   │
+│   └── services/
+│       ├── notification_service.dart    # Local + FCM notifications
+│       ├── sync_service.dart            # Background sync
+│       └── connectivity_service.dart    # Network status
+│
+├── android/
+├── ios/
+├── test/
+├── pubspec.yaml
+└── README.md</code></pre>
+<hr />
+<h2 id="offline-sync-strategy">9. Offline Sync Strategy</h2>
+<h3 id="how-it-works">9.1 How It Works</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                     OFFLINE MODE                                 │
+│                                                                  │
+│  User Action ──► SQLite (Local) ──► Sync Queue (Pending)        │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              │ When online
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     SYNC PROCESS                                 │
+│                                                                  │
+│  1. Push: Sync Queue ──► API ──► PostgreSQL                     │
+│  2. Pull: PostgreSQL ──► API ──► SQLite                         │
+│  3. Clear synced items from queue                                │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="conflict-resolution">9.2 Conflict Resolution</h3>
+<ul>
+<li><strong>Last Write Wins</strong>: Server timestamp takes
+priority</li>
+<li><strong>Merge Learning Notes</strong>: If both have notes, append
+with separator</li>
+</ul>
+<h3 id="sync-triggers">9.3 Sync Triggers</h3>
+<ul>
+<li>App comes to foreground</li>
+<li>Network connection restored</li>
+<li>Manual pull-to-refresh</li>
+<li>Background sync (every 15 minutes when online)</li>
+</ul>
+<hr />
+<h2 id="ai-report-generation-gemini">10. AI Report Generation
+(Gemini)</h2>
+<h3 id="when-reports-are-generated">10.1 When Reports Are Generated</h3>
+<ul>
+<li>Automatically on 1st of each month (cron job)</li>
+<li>Manual trigger by user</li>
+</ul>
+<h3 id="data-sent-to-gemini">10.2 Data Sent to Gemini</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;user_id&quot;</span><span class="fu">:</span> <span class="st">&quot;uuid&quot;</span><span class="fu">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;month&quot;</span><span class="fu">:</span> <span class="st">&quot;2024-01&quot;</span><span class="fu">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;habits&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;title&quot;</span><span class="fu">:</span> <span class="st">&quot;Solve 1 DSA question&quot;</span><span class="fu">,</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;category&quot;</span><span class="fu">:</span> <span class="st">&quot;learning&quot;</span><span class="fu">,</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;completion_rate&quot;</span><span class="fu">:</span> <span class="dv">85</span><span class="fu">,</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;streak&quot;</span><span class="fu">:</span> <span class="dv">12</span><span class="fu">,</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;learning_notes&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Learned binary search&quot;</span><span class="ot">,</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Practiced recursion&quot;</span><span class="ot">,</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Understood dynamic programming basics&quot;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;total_habits&quot;</span><span class="fu">:</span> <span class="dv">5</span><span class="fu">,</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;overall_completion&quot;</span><span class="fu">:</span> <span class="dv">72</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="expected-report-output">10.3 Expected Report Output</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;summary&quot;</span><span class="fu">:</span> <span class="st">&quot;Great month! You maintained strong consistency...&quot;</span><span class="fu">,</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;improvements&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;DSA skills improved significantly&quot;</span><span class="ot">,</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Morning routine became consistent&quot;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;skills_learned&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Binary Search&quot;</span><span class="ot">,</span> <span class="st">&quot;Recursion&quot;</span><span class="ot">,</span> <span class="st">&quot;DP Basics&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;areas_to_improve&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Gym attendance dropped in week 3&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;revision_suggestions&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;skill&quot;</span><span class="fu">:</span> <span class="st">&quot;Java Basics&quot;</span><span class="fu">,</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;reason&quot;</span><span class="fu">:</span> <span class="st">&quot;Learned 30 days ago, time to revise&quot;</span><span class="fu">,</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;suggested_duration_days&quot;</span><span class="fu">:</span> <span class="dv">7</span><span class="fu">,</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;daily_minutes&quot;</span><span class="fu">:</span> <span class="dv">60</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;motivational_note&quot;</span><span class="fu">:</span> <span class="st">&quot;Keep up the great work!&quot;</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr />
+<h2 id="push-notifications">11. Push Notifications</h2>
+<h3 id="notification-types">11.1 Notification Types</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 37%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Trigger</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Morning Reminder</td>
+<td>User’s morning time</td>
+<td>“Good morning! Ready to crush your habits today?”</td>
+</tr>
+<tr class="even">
+<td>Evening Log Reminder</td>
+<td>User’s evening time</td>
+<td>“Don’t forget to log your habits for today!”</td>
+</tr>
+<tr class="odd">
+<td>Streak Alert</td>
+<td>Streak at risk</td>
+<td>“Your 10-day streak is at risk! Complete your habit.”</td>
+</tr>
+<tr class="even">
+<td>Report Ready</td>
+<td>Monthly report generated</td>
+<td>“Your January report is ready! See your progress.”</td>
+</tr>
+<tr class="odd">
+<td>Revision Reminder</td>
+<td>Revision habit suggested</td>
+<td>“Time to revise Java! AI suggests 7-day refresh.”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="implementation">11.2 Implementation</h3>
+<ul>
+<li><strong>Backend</strong>: Golang sends FCM messages</li>
+<li><strong>Frontend</strong>: Flutter handles notification display and
+deep linking</li>
+</ul>
+<hr />
+<h2 id="cicd-pipeline">12. CI/CD Pipeline</h2>
+<h3 id="github-actions-workflow">12.1 GitHub Actions Workflow</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># .github/workflows/main.yml</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> CI/CD Pipeline</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">,</span><span class="at"> develop</span><span class="kw">]</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">  # Backend Tests &amp; Deploy</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Setup Go</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-go@v4</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">go-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;1.21&#39;</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Run Tests</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> go test ./...</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> go build -o app ./cmd/server</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Deploy to Railway</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">if</span><span class="kw">:</span><span class="at"> github.ref == &#39;refs/heads/main&#39;</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> railway up</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co">  # Flutter Build</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">flutter</span><span class="kw">:</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> subosito/flutter-action@v2</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">flutter-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;3.16.0&#39;</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> flutter pub get</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> flutter test</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> flutter build apk --release</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> flutter build ios --release --no-codesign</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="co">  # iOS Deploy (on main branch)</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ios-deploy</span><span class="kw">:</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">needs</span><span class="kw">:</span><span class="at"> flutter</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> macos-latest</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">if</span><span class="kw">:</span><span class="at"> github.ref == &#39;refs/heads/main&#39;</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> subosito/flutter-action@v2</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build &amp; Deploy iOS</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>          cd ios</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>          fastlane release</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a><span class="co">  # Android Deploy (on main branch)</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">android-deploy</span><span class="kw">:</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">needs</span><span class="kw">:</span><span class="at"> flutter</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">if</span><span class="kw">:</span><span class="at"> github.ref == &#39;refs/heads/main&#39;</span></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> subosito/flutter-action@v2</span></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build &amp; Deploy Android</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>          cd android</span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>          fastlane release</span></code></pre></div>
+<hr />
+<h2 id="environment-variables">13. Environment Variables</h2>
+<h3 id="backend-.env">13.1 Backend (.env)</h3>
+<pre class="env"><code># Server
+PORT=8080
+ENV=development
+
+# Database
+DATABASE_URL=postgres://user:pass@host:5432/habitdb
+
+# Firebase
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CREDENTIALS_JSON=base64_encoded_service_account
+
+# Gemini
+GEMINI_API_KEY=your-gemini-api-key
+
+# JWT
+JWT_SECRET=your-jwt-secret
+JWT_EXPIRY=24h</code></pre>
+<h3 id="flutter-.env">13.2 Flutter (.env)</h3>
+<pre class="env"><code>API_BASE_URL=https://your-api.railway.app
+FIREBASE_WEB_API_KEY=your-web-api-key</code></pre>
+<hr />
+<h2 id="development-phases">14. Development Phases</h2>
+<h3 id="phase-1-foundation-week-1-2">Phase 1: Foundation (Week 1-2)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>Setup Flutter project with folder
+structure</label></li>
+<li><label><input type="checkbox"></input>Setup Golang project with folder
+structure</label></li>
+<li><label><input type="checkbox"></input>Setup PostgreSQL on
+Railway</label></li>
+<li><label><input type="checkbox"></input>Implement Firebase Auth (Flutter +
+Golang)</label></li>
+<li><label><input type="checkbox"></input>Basic Habit CRUD (API +
+UI)</label></li>
+</ul>
+<h3 id="phase-2-core-features-week-3-4">Phase 2: Core Features (Week
+3-4)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>Daily logging with learning
+notes</label></li>
+<li><label><input type="checkbox"></input>Streak calculation
+logic</label></li>
+<li><label><input type="checkbox"></input>SQLite local database
+setup</label></li>
+<li><label><input type="checkbox"></input>Basic offline support</label></li>
+</ul>
+<h3 id="phase-3-ai-notifications-week-5-6">Phase 3: AI &amp;
+Notifications (Week 5-6)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>Gemini API integration</label></li>
+<li><label><input type="checkbox"></input>Monthly report
+generation</label></li>
+<li><label><input type="checkbox"></input>Revision suggestions
+logic</label></li>
+<li><label><input type="checkbox"></input>FCM push notifications</label></li>
+</ul>
+<h3 id="phase-4-polish-deploy-week-7-8">Phase 4: Polish &amp; Deploy
+(Week 7-8)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>Offline sync refinement</label></li>
+<li><label><input type="checkbox"></input>UI/UX polish</label></li>
+<li><label><input type="checkbox"></input>CI/CD pipeline setup</label></li>
+<li><label><input type="checkbox"></input>App Store &amp; Play Store
+submission</label></li>
+</ul>
+<hr />
+<h2 id="key-technical-decisions">15. Key Technical Decisions</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Decision</th>
+<th>Choice</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>State Management</td>
+<td>Bloc or Riverpod</td>
+<td>Both work well, team preference</td>
+</tr>
+<tr class="even">
+<td>HTTP Client</td>
+<td>Dio</td>
+<td>Better interceptors, error handling</td>
+</tr>
+<tr class="odd">
+<td>Local DB</td>
+<td>sqflite</td>
+<td>Native SQLite, proven reliability</td>
+</tr>
+<tr class="even">
+<td>Backend Framework</td>
+<td>Gin</td>
+<td>Fast, minimal, great for APIs</td>
+</tr>
+<tr class="odd">
+<td>DB Driver</td>
+<td>pgx</td>
+<td>Best PostgreSQL driver for Go</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="success-metrics">16. Success Metrics</h2>
+<ul>
+<li>User can create and track habits offline</li>
+<li>Sync works seamlessly when online</li>
+<li>AI reports generate accurately with useful insights</li>
+<li>Push notifications arrive on time</li>
+<li>App loads in under 2 seconds</li>
+</ul>
+<hr />
+<p><strong>End of Report</strong></p>
+<p><em>This document should be used as the source of truth for Claude
+Code prompts.</em></p>
+</body>
+</html>

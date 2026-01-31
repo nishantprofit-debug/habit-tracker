@@ -1,0 +1,63 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend
+backend/main
+backend/*.exe
+backend/tmp/
+backend/vendor/
+
+# Flutter
+app/.dart_tool/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/.packages
+app/build/
+app/.pub-cache/
+app/.pub/
+app/coverage/
+app/*.iml
+app/.metadata
+
+# Firebase
+**/google-services.json
+**/GoogleService-Info.plist
+firebase-service-account.json
+**/firebase_app_id_file.json
+
+# SSL certificates
+nginx/ssl/*.pem
+nginx/ssl/*.key
+nginx/ssl/*.crt
+
+# Logs
+*.log
+logs/
+
+# Test coverage
+coverage/
+*.lcov
+
+# Build artifacts
+dist/
+out/
+*.apk
+*.aab
+*.ipa
+
+# Docker
+docker-compose.override.yml
