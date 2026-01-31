@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"math"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/habittracker/backend/internal/models"
