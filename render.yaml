@@ -1,12 +1,12 @@
 services:
   # Go Backend API
   - type: web
-    name: habittracker-api
-    env: go
+    name: habit-tracker
+    env: docker
     region: oregon
     plan: free
-    buildCommand: cd backend && go build -o main ./cmd/server
-    startCommand: cd backend && ./main
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
     envVars:
       - key: APP_ENV
         value: production
