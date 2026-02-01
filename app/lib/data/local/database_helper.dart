@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../core/constants/app_constants.dart';
+import 'package:habit_tracker/core/constants/app_constants.dart';
 
 /// Database Helper for SQLite operations
 class DatabaseHelper {
@@ -177,3 +177,4 @@ class DatabaseHelper {
     }
   }
 }
+

@@ -6,8 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
-import 'core/services/notification_service.dart';
-import 'data/local/database_helper.dart';
+import 'package:habit_tracker/core/services/notification_service.dart';
+import 'package:habit_tracker/data/local/database_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,3 +70,4 @@ void main() async {
     ),
   );
 }
+

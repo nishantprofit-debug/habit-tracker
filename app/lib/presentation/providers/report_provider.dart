@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/models/report_model.dart';
+import 'package:habit_tracker/data/models/report_model.dart';
 
 /// Reports state
 class ReportsState {
@@ -349,3 +349,4 @@ final revisionsProvider =
 final pendingSuggestionsCountProvider = Provider<int>((ref) {
   return ref.watch(revisionsProvider).pendingSuggestions.length;
 });
+

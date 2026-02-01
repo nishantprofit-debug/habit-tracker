@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/constants/api_endpoints.dart';
-import '../../core/constants/app_constants.dart';
+import 'package:habit_tracker/core/constants/api_endpoints.dart';
+import 'package:habit_tracker/core/constants/app_constants.dart';
 
 /// API Client for making HTTP requests
 class ApiClient {
@@ -202,3 +202,4 @@ class ApiClient {
     );
   }
 }
+

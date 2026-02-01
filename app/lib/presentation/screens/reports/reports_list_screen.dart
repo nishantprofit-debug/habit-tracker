@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:habit_tracker/core/theme/app_colors.dart';
 
 class ReportsListScreen extends ConsumerWidget {
   const ReportsListScreen({super.key});
@@ -248,3 +248,4 @@ class _ReportCard extends StatelessWidget {
     );
   }
 }
+

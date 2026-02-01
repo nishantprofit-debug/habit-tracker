@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:habit_tracker/core/theme/app_colors.dart';
 import '../../widgets/common/app_text_field.dart';
 import '../../widgets/habit/habit_card.dart';
 
@@ -233,3 +233,4 @@ class _HabitsListScreenState extends ConsumerState<HabitsListScreen>
     {'id': '8', 'title': 'No social media', 'category': 'productivity', 'streak': '0', 'completed': 'false'},
   ];
 }
+

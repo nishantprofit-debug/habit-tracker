@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:habit_tracker/core/theme/app_colors.dart';
 import '../../widgets/habit/habit_card.dart';
 
 class CalendarScreen extends ConsumerStatefulWidget {
@@ -369,3 +369,4 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     ];
   }
 }
+

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/models/habit_model.dart';
+import 'package:habit_tracker/data/models/habit_model.dart';
 
 /// Habits state
 class HabitsState {
@@ -282,3 +282,4 @@ final completionStatsProvider = Provider<Map<String, dynamic>>((ref) {
     'percentage': total > 0 ? completed / total : 0.0,
   };
 });
+

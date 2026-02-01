@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/models/user_model.dart';
+import 'package:habit_tracker/data/models/user_model.dart';
 
 /// Auth state for the application
 class AuthState {
@@ -225,3 +225,4 @@ final isAuthenticatedProvider = Provider<bool>((ref) {
 final currentUserProvider = Provider<UserModel?>((ref) {
   return ref.watch(authProvider).user;
 });
+

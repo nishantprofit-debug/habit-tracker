@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../core/constants/app_constants.dart';
-import '../../../core/router/app_router.dart';
-import '../../../core/theme/app_colors.dart';
+import 'package:habit_tracker/core/constants/app_constants.dart';
+import 'package:habit_tracker/core/router/app_router.dart';
+import 'package:habit_tracker/core/theme/app_colors.dart';
 
 /// Splash Screen
 class SplashScreen extends ConsumerStatefulWidget {
@@ -129,3 +129,5 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
   }
 }
+
+

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:habit_tracker/core/theme/app_colors.dart';
 
 /// Habit card widget with minimalist design
 class HabitCard extends StatelessWidget {
@@ -234,3 +234,4 @@ class HabitCardCompact extends StatelessWidget {
     );
   }
 }
+

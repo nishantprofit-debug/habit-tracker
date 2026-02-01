@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:habit_tracker/core/theme/app_colors.dart';
 
 /// Custom App Button with minimalist design
 class AppButton extends StatelessWidget {
@@ -133,3 +133,4 @@ class AppIconButton extends StatelessWidget {
     );
   }
 }
+

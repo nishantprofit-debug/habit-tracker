@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:habit_tracker/core/theme/app_colors.dart';
 
 /// Custom App Text Field with minimalist design
 class AppTextField extends StatelessWidget {
@@ -189,3 +189,4 @@ class AppSearchField extends StatelessWidget {
     );
   }
 }
+

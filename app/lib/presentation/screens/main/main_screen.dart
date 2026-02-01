@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/router/app_router.dart';
+import 'package:habit_tracker/core/theme/app_colors.dart';
+import 'package:habit_tracker/core/router/app_router.dart';
 
 /// Main Screen with Bottom Navigation
 class MainScreen extends StatelessWidget {
@@ -144,3 +144,5 @@ class _NavItem extends StatelessWidget {
     );
   }
 }
+
+
