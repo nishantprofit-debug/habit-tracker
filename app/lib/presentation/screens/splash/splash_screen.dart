@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +21,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
+  Timer? _navigationTimer;
 
   @override
   void initState() {
@@ -40,30 +43,31 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _checkAuthStatus();
   }
 
-  Future<void> _checkAuthStatus() async {
+  void _checkAuthStatus() {
     debugPrint('DEBUG [SplashScreen]: Checking auth status...');
-    await Future.delayed(const Duration(seconds: 2));
+    _navigationTimer = Timer(const Duration(seconds: 2), () async {
+      if (!mounted) return;
 
-    if (!mounted) return;
+      final prefs = await SharedPreferences.getInstance();
+      if (!mounted) return;
+      final accessToken = prefs.getString(AppConstants.accessTokenKey);
+      debugPrint('DEBUG [SplashScreen]: Token exists = ${accessToken != null && accessToken.isNotEmpty}');
 
-    final prefs = await SharedPreferences.getInstance();
-    if (!mounted) return;
-    final accessToken = prefs.getString(AppConstants.accessTokenKey);
-    debugPrint('DEBUG [SplashScreen]: Token exists = ${accessToken != null && accessToken.isNotEmpty}');
-
-    if (accessToken != null && accessToken.isNotEmpty) {
-      // User is logged in
-      debugPrint('DEBUG [SplashScreen]: >>> Navigating to HOME');
-      context.go(AppRoutes.home);
-    } else {
-      // User needs to login
-      debugPrint('DEBUG [SplashScreen]: >>> Navigating to LOGIN');
-      context.go(AppRoutes.login);
-    }
+      if (accessToken != null && accessToken.isNotEmpty) {
+        // User is logged in
+        debugPrint('DEBUG [SplashScreen]: >>> Navigating to HOME');
+        if (mounted) context.go(AppRoutes.home);
+      } else {
+        // User needs to login
+        debugPrint('DEBUG [SplashScreen]: >>> Navigating to LOGIN');
+        if (mounted) context.go(AppRoutes.login);
+      }
+    });
   }
 
   @override
   void dispose() {
+    _navigationTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }

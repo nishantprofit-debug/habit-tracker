@@ -18,8 +18,10 @@ void main() {
       ),
     );
 
-    // Verify that the app title is present (as a placeholder check)
-    // In a real app, you'd check for specific home screen widgets
+    // Verify that the app is created
     expect(find.byType(HabitTrackerApp), findsOneWidget);
+
+    // Wait for splash screen timer and navigation to complete
+    await tester.pumpAndSettle(const Duration(seconds: 3));
   });
 }
