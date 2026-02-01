@@ -10,8 +10,8 @@ class ApiEndpoints {
   static const String supabaseRest = '$supabaseUrl/rest/v1';
   static const String supabaseAuth = '$supabaseUrl/auth/v1';
   
-  // Backend API URL (Go server on Render - update when deployed)
-  static const String baseUrl = 'http://localhost:8080/api/v1'; // Change to Render URL in production
+  // Backend API URL (Go server on Render)
+  static const String baseUrl = 'https://habittracker-api.onrender.com/api/v1';
 
   // Auth
   static const String authRegister = '/auth/register';

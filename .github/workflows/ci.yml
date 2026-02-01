@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 env:
-  GO_VERSION: '1.21'
-  FLUTTER_VERSION: '3.16.0'
+  GO_VERSION: '1.23'
+  FLUTTER_VERSION: '3.24.0'
 
 jobs:
   # Backend Tests
@@ -131,6 +131,10 @@ jobs:
         working-directory: ./app
         run: flutter pub get
 
+      - name: Run code generation
+        working-directory: ./app
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
       - name: Analyze code
         working-directory: ./app
         run: flutter analyze
@@ -173,6 +177,10 @@ jobs:
         working-directory: ./app
         run: flutter pub get
 
+      - name: Run code generation
+        working-directory: ./app
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
       - name: Build APK
         working-directory: ./app
         run: flutter build apk --release
@@ -183,31 +191,8 @@ jobs:
           name: android-release
           path: app/build/app/outputs/flutter-apk/app-release.apk
 
-  # Flutter Build iOS
-  flutter-build-ios:
-    name: Flutter Build (iOS)
-    runs-on: macos-latest
-    needs: flutter-test
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'stable'
-          cache: true
-
-      - name: Get dependencies
-        working-directory: ./app
-        run: flutter pub get
-
-      - name: Build iOS
-        working-directory: ./app
-        run: flutter build ios --release --no-codesign
+  # Flutter Build iOS is skipped because the ios/ directory is missing in the repository.
+  # To enable, run 'flutter create .' in the app directory to regenerate platform files.
 
   # Deploy Backend (Production)
   deploy-backend:
