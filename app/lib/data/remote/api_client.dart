@@ -12,6 +12,8 @@ class ApiClient {
   String? _accessToken;
 
   ApiClient._() {
+    debugPrint('DEBUG: Initializing ApiClient');
+    debugPrint('DEBUG: Base URL: ${ApiEndpoints.baseUrl}');
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiEndpoints.baseUrl,
@@ -26,6 +28,7 @@ class ApiClient {
     );
 
     _setupInterceptors();
+    debugPrint('DEBUG: ApiClient initialized successfully');
   }
 
   /// Get singleton instance
@@ -44,23 +47,49 @@ class ApiClient {
             options.headers['Authorization'] = 'Bearer $_accessToken';
           }
 
-          debugPrint('REQUEST[${options.method}] => PATH: ${options.path}');
+          debugPrint('=== API REQUEST ===');
+          debugPrint('METHOD: ${options.method}');
+          debugPrint('URL: ${options.baseUrl}${options.path}');
+          debugPrint('HEADERS: ${options.headers}');
+          if (options.data != null) {
+            debugPrint('BODY: ${options.data}');
+          }
+          if (options.queryParameters.isNotEmpty) {
+            debugPrint('QUERY PARAMS: ${options.queryParameters}');
+          }
+          debugPrint('==================');
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          debugPrint('RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+          debugPrint('=== API RESPONSE ===');
+          debugPrint('STATUS: ${response.statusCode}');
+          debugPrint('URL: ${response.requestOptions.baseUrl}${response.requestOptions.path}');
+          debugPrint('DATA: ${response.data}');
+          debugPrint('====================');
           return handler.next(response);
         },
         onError: (error, handler) async {
-          debugPrint('ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}');
+          debugPrint('=== API ERROR ===');
+          debugPrint('STATUS: ${error.response?.statusCode}');
+          debugPrint('URL: ${error.requestOptions.baseUrl}${error.requestOptions.path}');
+          debugPrint('MESSAGE: ${error.message}');
+          if (error.response?.data != null) {
+            debugPrint('ERROR DATA: ${error.response?.data}');
+          }
+          debugPrint('STACK TRACE: ${error.stackTrace}');
+          debugPrint('=================');
 
           // Handle 401 - Token expired
           if (error.response?.statusCode == 401) {
+            debugPrint('DEBUG: Token expired, attempting refresh...');
             final refreshed = await _refreshToken();
             if (refreshed) {
+              debugPrint('DEBUG: Token refreshed successfully, retrying request');
               // Retry the request
               final response = await _retry(error.requestOptions);
               return handler.resolve(response);
+            } else {
+              debugPrint('DEBUG: Token refresh failed');
             }
           }
 
@@ -72,11 +101,13 @@ class ApiClient {
 
   /// Set access token
   void setAccessToken(String token) {
+    debugPrint('DEBUG: Setting access token: ${token.substring(0, 10)}...');
     _accessToken = token;
   }
 
   /// Clear access token
   void clearAccessToken() {
+    debugPrint('DEBUG: Clearing access token');
     _accessToken = null;
   }
 

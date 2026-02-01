@@ -87,7 +87,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // Header
                 const Text(
                   'Welcome back',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
                     color: AppColors.grey900,
@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     },
                     child: const Text(
                       'Forgot password?',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.grey700,
                         fontWeight: FontWeight.w500,
                       ),
@@ -183,9 +183,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     const Expanded(child: Divider(color: AppColors.grey300)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
+                      child: const Text(
                         'or',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.grey500,
                           fontSize: 14,
                         ),
@@ -202,12 +202,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     debugPrint('DEBUG [LoginScreen]: Google Sign In tapped');
                     // TODO: Implement Google Sign In
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.g_mobiledata, size: 24),
-                      const SizedBox(width: 8),
-                      const Text('Continue with Google'),
+                      SizedBox(width: 8),
+                      Text('Continue with Google'),
                     ],
                   ),
                 ),
@@ -219,12 +219,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     debugPrint('DEBUG [LoginScreen]: Apple Sign In tapped');
                     // TODO: Implement Apple Sign In
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.apple, size: 24),
-                      const SizedBox(width: 8),
-                      const Text('Continue with Apple'),
+                      SizedBox(width: 8),
+                      Text('Continue with Apple'),
                     ],
                   ),
                 ),
