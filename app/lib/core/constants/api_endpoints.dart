@@ -11,7 +11,7 @@ class ApiEndpoints {
   static const String supabaseAuth = '$supabaseUrl/auth/v1';
   
   // Backend API URL (Go server on Render)
-  static const String baseUrl = 'https://habittracker-api.onrender.com/api/v1';
+  static const String baseUrl = 'https://habit-tracker-s7er.onrender.com/api/v1';
 
   // Auth
   static const String authRegister = '/auth/register';
