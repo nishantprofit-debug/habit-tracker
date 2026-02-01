@@ -51,7 +51,7 @@ func (s *LogService) CreateOrUpdateLog(ctx context.Context, userID uuid.UUID, re
 	existingLog, err := s.logRepo.GetByHabitAndDate(ctx, req.HabitID, logDate)
 	wasCompletedBefore := err == nil && existingLog.Completed
 
-	log := &models.DailyLog{
+	dailyLog := &models.DailyLog{
 		HabitID:      req.HabitID,
 		UserID:       userID,
 		LogDate:      logDate,
@@ -61,10 +61,10 @@ func (s *LogService) CreateOrUpdateLog(ctx context.Context, userID uuid.UUID, re
 	}
 
 	if existingLog != nil {
-		log.ID = existingLog.ID
+		dailyLog.ID = existingLog.ID
 	}
 
-	if err := s.logRepo.CreateOrUpdate(ctx, log); err != nil {
+	if err := s.logRepo.CreateOrUpdate(ctx, dailyLog); err != nil {
 		return nil, err
 	}
 
@@ -83,27 +83,27 @@ func (s *LogService) CreateOrUpdateLog(ctx context.Context, userID uuid.UUID, re
 
 	// Award XP for learning note if new
 	if req.LearningNote != nil && *req.LearningNote != "" && (existingLog == nil || existingLog.LearningNote == nil || *existingLog.LearningNote == "") {
-		if err := s.gamificationSvc.AwardLearningNoteXP(ctx, userID, log.ID); err != nil {
+		if err := s.gamificationSvc.AwardLearningNoteXP(ctx, userID, dailyLog.ID); err != nil {
 			log.Printf("failed to award learning note XP to user %s: %v", userID, err)
 		}
 	}
 
-	return log, nil
+	return dailyLog, nil
 }
 
 // GetLog retrieves a daily log by ID
 func (s *LogService) GetLog(ctx context.Context, userID, logID uuid.UUID) (*models.DailyLog, error) {
-	log, err := s.logRepo.GetByID(ctx, logID)
+	dailyLog, err := s.logRepo.GetByID(ctx, logID)
 	if err != nil {
 		return nil, err
 	}
 
 	// Verify ownership
-	if log.UserID != userID {
+	if dailyLog.UserID != userID {
 		return nil, repository.ErrLogNotFound
 	}
 
-	return log, nil
+	return dailyLog, nil
 }
 
 // GetTodayLogs retrieves today's logs for all habits
