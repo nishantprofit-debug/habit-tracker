@@ -63,11 +63,20 @@ func Load() *Config {
 	}
 }
 
-// getEnv gets an environment variable or returns a default value
+// getEnv gets an environment variable or returns a default value.
+// It checks for standard keys and custom prefixes requested by the user.
 func getEnv(key, defaultValue string) string {
+	// 1. Check for custom user-requested keys first (e.g., NISHANT_DATABASE_URL)
+	customKey := "NISHANT_" + key
+	if value := os.Getenv(customKey); value != "" {
+		return value
+	}
+
+	// 2. Check for standard keys
 	if value := os.Getenv(key); value != "" {
 		return value
 	}
+
 	return defaultValue
 }
 
