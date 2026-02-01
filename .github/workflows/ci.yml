@@ -8,7 +8,7 @@ on:
 
 env:
   GO_VERSION: '1.23'
-  FLUTTER_VERSION: '3.19.6'
+  FLUTTER_VERSION: '3.22.3'
 
 jobs:
   # Backend Tests
