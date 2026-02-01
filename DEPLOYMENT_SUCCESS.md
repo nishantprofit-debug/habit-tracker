@@ -51,16 +51,13 @@ Add these variables:
 ```env
 APP_ENV=production
 PORT=8080
+DATABASE_URL=postgres://postgres.cwjcfsnpqiyzluybmwxc:[YOUR-PASSWORD]@aws-0-us-west-1.pooler.supabase.com:6543/postgres
 SUPABASE_URL=https://cwjcfsnpqiyzluybmwxc.supabase.co
 SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3amNmc25wcWl5emx1eWJtd3hjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NjEzMzAsImV4cCI6MjA4NTQzNzMzMH0.osaCK27a1ZlE6XUeEMTrKKpZH2o0uPtz2byslRCaz9s
-```
-
-**Optional (get from Supabase Settings → API):**
-```env
-SUPABASE_SERVICE_KEY=your_service_role_key
-SUPABASE_JWT_SECRET=your_jwt_secret
 GEMINI_API_KEY=your_gemini_api_key
 ```
+
+> **Note on DATABASE_URL:** You can find this in your **Supabase Dashboard** under **Project Settings** -> **Database** -> **Connection string** (choose **URI** and use the **Transaction Pooler** port 6543). Replace `[YOUR-PASSWORD]` with your actual database password.
 
 ### Step 4: Create Web Service
 

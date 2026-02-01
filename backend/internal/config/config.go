@@ -38,7 +38,7 @@ func Load() *Config {
 	return &Config{
 		// Server
 		Port: getEnv("PORT", "8080"),
-		Env:  getEnv("ENV", "development"),
+		Env:  getEnv("APP_ENV", "development"),
 
 		// Database
 		DatabaseURL: getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/habittracker?sslmode=disable"),
