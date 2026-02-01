@@ -21,7 +21,13 @@ void main() {
     // Verify that the app is created
     expect(find.byType(HabitTrackerApp), findsOneWidget);
 
-    // Wait for splash screen timer and navigation to complete
-    await tester.pumpAndSettle(const Duration(seconds: 3));
+    // Pump frames to allow the splash screen to initialize
+    await tester.pump();
+
+    // Wait for the splash screen timer (2 seconds) and navigation
+    await tester.pump(const Duration(seconds: 2));
+
+    // Pump one more frame to complete the navigation
+    await tester.pump();
   });
 }
