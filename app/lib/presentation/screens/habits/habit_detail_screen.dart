@@ -343,7 +343,7 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
   void _archiveHabit(HabitModel habit) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text(habit.isActive ? 'Archive Habit' : 'Unarchive Habit'),
         content: Text(
           habit.isActive 
@@ -352,21 +352,17 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
-              Navigator.pop(context); // Close dialog
+              Navigator.pop(dialogContext); // Close dialog
               
               bool success = false;
               if (habit.isActive) {
                 success = await ref.read(habitsProvider.notifier).deactivateHabit(habit.id);
               } else {
-                // We need a restore/activate habit method in provider, simpler to just update habit with isActive=true
-                // But for now, let's assume deactivateHabit toggle or create a separate one. 
-                // Let's assume we implement a re-activate path. 
-                // For now, let's just use updateHabit to set isActive = true
                  final updatedHabit = habit.copyWith(isActive: true);
                  success = await ref.read(habitsProvider.notifier).updateHabit(updatedHabit);
               }
@@ -388,19 +384,19 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
   void _deleteHabit(HabitModel habit) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Delete Habit'),
         content: const Text(
           'Are you sure you want to delete this habit? This action cannot be undone.',
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               final success = await ref.read(habitsProvider.notifier).deleteHabit(habit.id);
               
               if (success && mounted) {
