@@ -56,15 +56,15 @@ class ReportsNotifier extends StateNotifier<ReportsState> {
           totalDaysTracked: 28,
           bestStreak: 28,
           aiSummary: 'Great progress on health habits! Your morning exercise routine has become a solid habit.',
-          achievements: [
+          achievements: const [
             'Achieved 28-day streak on Morning Exercise',
             'Completed 100% of health habits for 3 consecutive weeks',
           ],
-          areasForImprovement: [
+          areasForImprovement: const [
             'Weekend habit completion needs attention',
             'Evening reading habit consistency',
           ],
-          categoryStats: {
+          categoryStats: const {
             'health': 0.92,
             'learning': 0.78,
             'productivity': 0.85,

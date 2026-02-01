@@ -23,7 +23,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
   bool _isLearningHabit = false;
   TimeOfDay? _reminderTime;
   String _selectedColor = '#000000';
-  String _selectedIcon = 'check_circle';
+  final String _selectedIcon = 'check_circle';
 
   final List<Map<String, String>> _categories = [
     {'id': 'health', 'label': 'Health', 'icon': 'favorite'},

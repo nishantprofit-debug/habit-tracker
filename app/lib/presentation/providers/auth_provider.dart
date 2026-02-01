@@ -89,7 +89,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         ),
-        tokens: AuthTokenModel(
+        tokens: const AuthTokenModel(
           accessToken: 'access-token',
           refreshToken: 'refresh-token',
           expiresIn: 3600,
@@ -133,7 +133,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         ),
-        tokens: AuthTokenModel(
+        tokens: const AuthTokenModel(
           accessToken: 'access-token',
           refreshToken: 'refresh-token',
           expiresIn: 3600,
