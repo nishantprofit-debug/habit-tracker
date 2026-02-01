@@ -9,36 +9,38 @@ import 'app.dart';
 import 'package:habit_tracker/core/services/notification_service.dart';
 import 'package:habit_tracker/data/local/database_helper.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 void main() async {
   debugPrint('==========================');
   debugPrint('  HABIT TRACKER APP START  ');
   debugPrint('==========================');
 
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Load env
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint('Warning: Failed to load .env file: $e');
+  }
+
   debugPrint('DEBUG: Flutter binding initialized');
 
   // Initialize Supabase
   debugPrint('DEBUG: Initializing Supabase...');
   try {
     await Supabase.initialize(
-      url: 'https://cwjcfsnpqiyzluybmwxc.supabase.co',
-      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3amNmc25wcWl5emx1eWJtd3hjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NjEzMzAsImV4cCI6MjA4NTQzNzMzMH0.osaCK27a1ZlE6XUeEMTrKKpZH2o0uPtz2byslRCaz9s',
+      url: dotenv.env['SUPABASE_URL'] ?? '',
+      anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
     );
     debugPrint('DEBUG: ✓ Supabase initialized successfully');
   } catch (e) {
     debugPrint('DEBUG: ✗ Supabase initialization failed: $e');
   }
 
-  // Initialize Firebase (with error handling)
-  debugPrint('DEBUG: Initializing Firebase...');
-  try {
-    await Firebase.initializeApp();
-    debugPrint('DEBUG: ✓ Firebase initialized successfully');
-  } catch (e) {
-    debugPrint('DEBUG: ✗ Firebase initialization failed: $e');
-    debugPrint('DEBUG: Continuing without Firebase');
-    // Continue without Firebase for now
-  }
+  // Firebase removed in favor of Supabase
+  debugPrint('DEBUG: Firebase initialization skipped (Removed)');
 
   // Initialize local database
   debugPrint('DEBUG: Initializing local database...');

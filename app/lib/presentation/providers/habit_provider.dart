@@ -55,7 +55,7 @@ class HabitsState {
 
   /// Get today's habits
   List<HabitModel> get todayHabits =>
-      habits.where((h) => h.isActive && h.frequency == HabitFrequency.daily).toList();
+      habits.where((h) => h.isActive && (h.frequency == HabitFrequency.daily || h.frequency == HabitFrequency.weekly)).toList();
 }
 
 /// Habits notifier

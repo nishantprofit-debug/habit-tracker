@@ -1,8 +1,10 @@
 import 'dart:io';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart'; // REMOVED
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 /// Notification Service for handling push and local notifications
 class NotificationService {
@@ -10,7 +12,7 @@ class NotificationService {
 
   static final NotificationService instance = NotificationService._();
 
-  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  // final FirebaseMessaging _messaging = FirebaseMessaging.instance; // REMOVED
   final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
 
@@ -21,36 +23,36 @@ class NotificationService {
     if (_initialized) return;
 
     // Request permission
-    await _requestPermission();
+    // await _requestPermission(); // Requires Firebase / Local implementation diff
 
     // Initialize local notifications
     await _initLocalNotifications();
 
+    // Initialize time zones
+    tz.initializeTimeZones();
+
     // Handle FCM messages
-    _setupFCMHandlers();
+    // _setupFCMHandlers(); // REMOVED
 
     _initialized = true;
   }
 
-  /// Request notification permission
-  Future<void> _requestPermission() async {
-    final settings = await _messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      debugPrint('User granted permission');
-    } else if (settings.authorizationStatus ==
-        AuthorizationStatus.provisional) {
-      debugPrint('User granted provisional permission');
-    } else {
-      debugPrint('User declined or has not accepted permission');
+  /// Request notification permission (Local only now)
+  Future<void> requestPermission() async {
+    if (Platform.isAndroid) {
+       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+          _localNotifications.resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
+       await androidImplementation?.requestNotificationsPermission();
+    } else if (Platform.isIOS) {
+       await _localNotifications
+          .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
     }
   }
 
@@ -90,54 +92,8 @@ class NotificationService {
     }
   }
 
-  /// Setup FCM message handlers
-  void _setupFCMHandlers() {
-    // Foreground messages
-    FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
+  // FCM Handlers removed.
 
-    // Background message tap
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageTap);
-
-    // Initial message (app opened from terminated state)
-    _messaging.getInitialMessage().then((message) {
-      if (message != null) {
-        _handleMessageTap(message);
-      }
-    });
-  }
-
-  /// Handle foreground message
-  Future<void> _handleForegroundMessage(RemoteMessage message) async {
-    debugPrint('Received foreground message: ${message.messageId}');
-
-    // Show local notification
-    await showLocalNotification(
-      title: message.notification?.title ?? 'Habit Tracker',
-      body: message.notification?.body ?? '',
-      payload: message.data.toString(),
-    );
-  }
-
-  /// Handle message tap
-  void _handleMessageTap(RemoteMessage message) {
-    debugPrint('Message tapped: ${message.messageId}');
-    // Navigate to appropriate screen based on message data
-    final data = message.data;
-    final screen = data['screen'];
-
-    // TODO: Implement navigation based on screen
-    switch (screen) {
-      case 'home':
-        // Navigate to home
-        break;
-      case 'reports':
-        // Navigate to reports
-        break;
-      case 'revisions':
-        // Navigate to revisions
-        break;
-    }
-  }
 
   /// Handle local notification tap
   void _onNotificationTapped(NotificationResponse response) {
@@ -145,10 +101,8 @@ class NotificationService {
     // TODO: Handle navigation based on payload
   }
 
-  /// Get FCM token
-  Future<String?> getToken() async {
-    return await _messaging.getToken();
-  }
+  // getToken removed
+
 
   /// Show local notification
   Future<void> showLocalNotification({
@@ -192,7 +146,39 @@ class NotificationService {
     required String title,
     required String body,
   }) async {
-    // TODO: Implement scheduled notifications
+    // ID based on hour/minute collision or random? Ideally should use habit ID hash
+    final id = DateTime.now().millisecondsSinceEpoch ~/ 1000; 
+    
+    await _localNotifications.zonedSchedule(
+      id,
+      title,
+      body,
+      _nextInstanceOfTime(hour, minute),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'habit_tracker_channel',
+          'Habit Tracker',
+          channelDescription: 'Notifications for daily habits',
+          importance: Importance.max,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+  }
+
+  tz.TZDateTime _nextInstanceOfTime(int hour, int minute) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
   }
 
   /// Cancel all notifications

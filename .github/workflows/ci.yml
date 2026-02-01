@@ -121,6 +121,13 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Create .env file
+        working-directory: ./app
+        run: |
+          echo "SUPABASE_URL=https://example.supabase.co" > .env
+          echo "SUPABASE_ANON_KEY=dummy-key" >> .env
+          echo "APP_ENV=test" >> .env
+
       - name: Get dependencies
         working-directory: ./app
         run: flutter pub get
@@ -166,6 +173,13 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
           cache: true
+
+      - name: Create .env file
+        working-directory: ./app
+        run: |
+          echo "SUPABASE_URL=https://example.supabase.co" > .env
+          echo "SUPABASE_ANON_KEY=dummy-key" >> .env
+          echo "APP_ENV=production" >> .env
 
       - name: Get dependencies
         working-directory: ./app
