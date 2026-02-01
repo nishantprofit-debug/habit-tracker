@@ -200,7 +200,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       padding: const EdgeInsets.all(40),
       child: Column(
         children: [
-          Icon(
+          const Icon(
             Icons.check_circle_outline,
             size: 80,
             color: AppColors.grey400,

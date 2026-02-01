@@ -130,8 +130,8 @@ class _RevisionSuggestionsScreenState
               ),
               child: SafeArea(
                 child: AppButton(
-                  child: Text('Apply ${_selectedSuggestions.length} Suggestion${_selectedSuggestions.length > 1 ? 's' : ''}'),
                   onPressed: _applySuggestions,
+                  child: Text('Apply ${_selectedSuggestions.length} Suggestion${_selectedSuggestions.length > 1 ? 's' : ''}'),
                 ),
               ),
             ),

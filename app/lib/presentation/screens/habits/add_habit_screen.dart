@@ -299,8 +299,8 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
+              children: const [
+                Text(
                   'Learning Habit',
                   style: TextStyle(
                     fontSize: 16,
@@ -308,7 +308,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
                     color: AppColors.grey900,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   'Track this as a learning goal',
                   style: TextStyle(
@@ -415,7 +415,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
                 ],
               ),
             ),
-            Icon(
+            const Icon(
               Icons.chevron_right,
               color: AppColors.grey400,
             ),

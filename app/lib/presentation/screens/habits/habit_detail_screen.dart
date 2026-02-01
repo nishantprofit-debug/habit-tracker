@@ -217,7 +217,7 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
                 children: [
                   const Text(
                     'This Week',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: AppColors.grey900,

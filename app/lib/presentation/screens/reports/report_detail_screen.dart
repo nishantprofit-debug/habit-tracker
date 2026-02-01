@@ -118,7 +118,7 @@ class ReportDetailScreen extends ConsumerWidget {
                           margin: const EdgeInsets.only(top: 4),
                           width: 8,
                           height: 8,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.grey400,
                             shape: BoxShape.circle,
                           ),
@@ -197,7 +197,7 @@ class ReportDetailScreen extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text(
+                    const Text(
                       'Based on your performance, here are some habit adjustments to consider:',
                       style: TextStyle(
                         fontSize: 14,
@@ -230,7 +230,7 @@ class ReportDetailScreen extends ConsumerWidget {
                                   const SizedBox(height: 4),
                                   Text(
                                     suggestion['reason']!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 13,
                                       color: AppColors.grey500,
                                     ),

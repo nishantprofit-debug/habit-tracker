@@ -53,7 +53,7 @@ class ReportsListScreen extends ConsumerWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.grey100,
                 shape: BoxShape.circle,
               ),
@@ -178,7 +178,7 @@ class _ReportCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
+                      const Text(
                         'Monthly Report',
                         style: TextStyle(
                           fontSize: 13,
@@ -205,9 +205,9 @@ class _ReportCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 16),
-            Row(
+            const Row(
               children: [
-                const Text(
+                Text(
                   'View full report',
                   style: TextStyle(
                     fontSize: 14,
@@ -215,7 +215,7 @@ class _ReportCard extends StatelessWidget {
                     color: AppColors.grey700,
                   ),
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Icon(
                   Icons.arrow_forward,
                   size: 16,

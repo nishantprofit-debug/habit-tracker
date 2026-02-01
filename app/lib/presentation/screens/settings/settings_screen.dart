@@ -161,18 +161,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: AppButton.outlined(
-                child: const Text('Sign Out'),
                 onPressed: _showLogoutDialog,
+                child: const Text('Sign Out'),
               ),
             ),
 
             // Version
-            Center(
+            const Center(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 32),
+                padding: EdgeInsets.only(bottom: 32),
                 child: Text(
                   'Version 1.0.0',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     color: AppColors.grey400,
                   ),
@@ -193,7 +193,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           Container(
             width: 64,
             height: 64,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.grey200,
               shape: BoxShape.circle,
             ),
@@ -207,8 +207,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
+              children: const [
+                Text(
                   'John Doe',
                   style: TextStyle(
                     fontSize: 18,
@@ -216,10 +216,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     color: AppColors.grey900,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   'john.doe@example.com',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     color: AppColors.grey500,
                   ),
