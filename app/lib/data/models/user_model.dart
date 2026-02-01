@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 /// User Model
 class UserModel extends Equatable {
   final String id;
+  final String firebaseUid;
   final String email;
   final String? displayName;
   final String? avatarUrl;
@@ -11,9 +12,11 @@ class UserModel extends Equatable {
   final String morningReminderTime;
   final String eveningReminderTime;
   final DateTime createdAt;
+  final DateTime updatedAt;
 
   const UserModel({
     required this.id,
+    required this.firebaseUid,
     required this.email,
     this.displayName,
     this.avatarUrl,
@@ -22,12 +25,14 @@ class UserModel extends Equatable {
     this.morningReminderTime = '06:00:00',
     this.eveningReminderTime = '21:00:00',
     required this.createdAt,
+    required this.updatedAt,
   });
 
   /// Create from JSON
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'] as String,
+      firebaseUid: json['firebase_uid'] as String,
       email: json['email'] as String,
       displayName: json['display_name'] as String?,
       avatarUrl: json['avatar_url'] as String?,
@@ -36,6 +41,7 @@ class UserModel extends Equatable {
       morningReminderTime: json['morning_reminder_time'] as String? ?? '06:00:00',
       eveningReminderTime: json['evening_reminder_time'] as String? ?? '21:00:00',
       createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
     );
   }
 
@@ -43,6 +49,7 @@ class UserModel extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'firebase_uid': firebaseUid,
       'email': email,
       'display_name': displayName,
       'avatar_url': avatarUrl,
@@ -51,6 +58,7 @@ class UserModel extends Equatable {
       'morning_reminder_time': morningReminderTime,
       'evening_reminder_time': eveningReminderTime,
       'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 
@@ -58,6 +66,7 @@ class UserModel extends Equatable {
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       id: map['id'] as String,
+      firebaseUid: map['firebase_uid'] as String,
       email: map['email'] as String,
       displayName: map['display_name'] as String?,
       avatarUrl: map['avatar_url'] as String?,
@@ -66,6 +75,7 @@ class UserModel extends Equatable {
       morningReminderTime: map['morning_reminder_time'] as String? ?? '06:00:00',
       eveningReminderTime: map['evening_reminder_time'] as String? ?? '21:00:00',
       createdAt: DateTime.parse(map['created_at'] as String),
+      updatedAt: DateTime.parse(map['updated_at'] as String),
     );
   }
 
@@ -73,6 +83,7 @@ class UserModel extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'firebase_uid': firebaseUid,
       'email': email,
       'display_name': displayName,
       'avatar_url': avatarUrl,
@@ -81,12 +92,14 @@ class UserModel extends Equatable {
       'morning_reminder_time': morningReminderTime,
       'evening_reminder_time': eveningReminderTime,
       'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 
   /// Copy with
   UserModel copyWith({
     String? id,
+    String? firebaseUid,
     String? email,
     String? displayName,
     String? avatarUrl,
@@ -95,9 +108,11 @@ class UserModel extends Equatable {
     String? morningReminderTime,
     String? eveningReminderTime,
     DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return UserModel(
       id: id ?? this.id,
+      firebaseUid: firebaseUid ?? this.firebaseUid,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
       avatarUrl: avatarUrl ?? this.avatarUrl,
@@ -106,6 +121,7 @@ class UserModel extends Equatable {
       morningReminderTime: morningReminderTime ?? this.morningReminderTime,
       eveningReminderTime: eveningReminderTime ?? this.eveningReminderTime,
       createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -127,6 +143,7 @@ class UserModel extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        firebaseUid,
         email,
         displayName,
         avatarUrl,
@@ -135,6 +152,48 @@ class UserModel extends Equatable {
         morningReminderTime,
         eveningReminderTime,
         createdAt,
+        updatedAt,
+      ];
+}
+
+/// Auth Token Model
+class AuthTokenModel extends Equatable {
+  final String accessToken;
+  final String refreshToken;
+  final int expiresIn;
+  final String tokenType;
+
+  const AuthTokenModel({
+    required this.accessToken,
+    required this.refreshToken,
+    required this.expiresIn,
+    required this.tokenType,
+  });
+
+  factory AuthTokenModel.fromJson(Map<String, dynamic> json) {
+    return AuthTokenModel(
+      accessToken: json['access_token'] as String,
+      refreshToken: json['refresh_token'] as String,
+      expiresIn: json['expires_in'] as int,
+      tokenType: json['token_type'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'access_token': accessToken,
+      'refresh_token': refreshToken,
+      'expires_in': expiresIn,
+      'token_type': tokenType,
+    };
+  }
+
+  @override
+  List<Object?> get props => [
+        accessToken,
+        refreshToken,
+        expiresIn,
+        tokenType,
       ];
 }
 

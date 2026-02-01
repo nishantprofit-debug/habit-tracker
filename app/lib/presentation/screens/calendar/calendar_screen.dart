@@ -246,7 +246,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         // Habits List
         Expanded(
           child: habits.isEmpty
-              ? Center(
+              ? const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -255,8 +255,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         size: 64,
                         color: AppColors.grey300,
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
+                      SizedBox(height: 16),
+                      Text(
                         'No habits for this day',
                         style: TextStyle(
                           fontSize: 16,

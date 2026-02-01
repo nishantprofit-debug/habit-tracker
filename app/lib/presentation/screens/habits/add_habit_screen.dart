@@ -153,8 +153,8 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
 
               // Submit Button
               AppButton(
-                child: const Text('Create Habit'),
                 onPressed: _createHabit,
+                child: const Text('Create Habit'),
               ),
               const SizedBox(height: 20),
             ],

@@ -178,12 +178,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 24),
 
                 // Divider
-                Row(
+                const Row(
                   children: [
-                    const Expanded(child: Divider(color: AppColors.grey300)),
+                    Expanded(child: Divider(color: AppColors.grey300)),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: const Text(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
                         'or',
                         style: TextStyle(
                           color: AppColors.grey500,
@@ -191,7 +191,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                       ),
                     ),
-                    const Expanded(child: Divider(color: AppColors.grey300)),
+                    Expanded(child: Divider(color: AppColors.grey300)),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -243,6 +243,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         debugPrint('DEBUG [LoginScreen]: Sign Up tapped - Navigating to Register');
                         context.go(AppRoutes.register);
                       },
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                      ),
                       child: const Text(
                         'Sign Up',
                         style: TextStyle(
