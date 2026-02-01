@@ -45,7 +45,7 @@ class _HabitsListScreenState extends ConsumerState<HabitsListScreen>
         elevation: 0,
         title: const Text(
           'My Habits',
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.grey900,
             fontWeight: FontWeight.w600,
           ),

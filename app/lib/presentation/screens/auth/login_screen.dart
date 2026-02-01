@@ -87,7 +87,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // Header
                 const Text(
                   'Welcome back',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
                     color: AppColors.grey900,
@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     },
                     child: const Text(
                       'Forgot password?',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.grey700,
                         fontWeight: FontWeight.w500,
                       ),
@@ -185,7 +185,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         'or',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.grey500,
                           fontSize: 14,
                         ),

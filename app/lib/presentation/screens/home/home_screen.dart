@@ -225,7 +225,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           const SizedBox(height: 24),
           AppButton(
-            text: 'Create Your First Habit',
+            child: const Text('Create Your First Habit'),
             onPressed: () {
               context.go(AppRoutes.addHabit);
             },

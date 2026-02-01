@@ -47,6 +47,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     if (!mounted) return;
 
     final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     final accessToken = prefs.getString(AppConstants.accessTokenKey);
     debugPrint('DEBUG [SplashScreen]: Token exists = ${accessToken != null && accessToken.isNotEmpty}');
 
@@ -95,18 +96,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               // App Name
               const Text(
                 'Habit Tracker',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
                   color: AppColors.grey900,
                   letterSpacing: -0.5,
                 ),
-              ),
               const SizedBox(height: 8),
               // Tagline
               const Text(
                 'Build better habits, every day',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: AppColors.grey600,

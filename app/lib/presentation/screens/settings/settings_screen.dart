@@ -172,7 +172,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 padding: const EdgeInsets.only(bottom: 32),
                 child: Text(
                   'Version 1.0.0',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
                     color: AppColors.grey400,
                   ),
@@ -219,7 +219,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'john.doe@example.com',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.grey500,
                   ),
@@ -291,7 +291,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             )
           : null,
-      trailing: Icon(
+      trailing: const Icon(
         Icons.chevron_right,
         color: AppColors.grey400,
       ),
@@ -358,7 +358,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       },
     );
 
-    if (time != null) {
+    if (time != null && mounted) {
       setState(() {
         final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
         final minute = time.minute.toString().padLeft(2, '0');
@@ -384,12 +384,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Data exported successfully'),
-                  backgroundColor: AppColors.grey900,
-                ),
-              );
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Data exported successfully'),
+                    backgroundColor: AppColors.grey900,
+                  ),
+                );
+              }
             },
             child: const Text('Export'),
           ),
