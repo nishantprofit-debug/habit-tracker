@@ -180,7 +180,7 @@ jobs:
         run: flutter build apk --release
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: android-release
           path: app/build/app/outputs/flutter-apk/app-release.apk
@@ -202,7 +202,7 @@ jobs:
       - name: Install Render CLI
         run: |
           curl -L https://github.com/render-oss/cli/releases/download/v1.1.0/cli_1.1.0_linux_amd64.zip -o render.zip
-          unzip render.zip
+          unzip -o render.zip
           sudo mv /home/runner/work/habittracker/habittracker/cli_v1.1.0 /usr/local/bin/render || sudo mv cli_v1.1.0 /usr/local/bin/render
           render --version
 
