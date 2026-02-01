@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import 'package:habit_tracker/core/theme/app_colors.dart';
 import 'package:habit_tracker/core/router/app_router.dart';
-import '../../providers/habit_provider.dart';
-import '../../widgets/common/app_button.dart';
-import '../../widgets/habit/habit_card.dart';
-import '../../widgets/gamification/level_progress.dart';
+import 'package:habit_tracker/presentation/providers/habit_provider.dart';
+import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
+import 'package:habit_tracker/presentation/widgets/habit/habit_card.dart';
+import 'package:habit_tracker/presentation/widgets/gamification/level_progress.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -396,5 +396,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
+
 
 

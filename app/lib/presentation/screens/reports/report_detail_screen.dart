@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:habit_tracker/core/theme/app_colors.dart';
-import '../../widgets/common/app_button.dart';
+import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
 
 class ReportDetailScreen extends ConsumerWidget {
   final String reportId;
@@ -497,4 +497,5 @@ Overall, you've demonstrated strong commitment to personal growth. Keep up the g
     ],
   };
 }
+
 

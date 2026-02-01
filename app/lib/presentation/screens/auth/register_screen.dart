@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:habit_tracker/core/router/app_router.dart';
 import 'package:habit_tracker/core/theme/app_colors.dart';
-import '../../widgets/common/app_button.dart';
-import '../../widgets/common/app_text_field.dart';
+import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
+import 'package:habit_tracker/presentation/widgets/common/app_text_field.dart';
 
 /// Register Screen
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -236,5 +236,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 }
+
 
 

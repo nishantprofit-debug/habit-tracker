@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../presentation/screens/splash/splash_screen.dart';
-import '../../presentation/screens/auth/login_screen.dart';
-import '../../presentation/screens/auth/register_screen.dart';
-import '../../presentation/screens/home/home_screen.dart';
-import '../../presentation/screens/habits/habits_list_screen.dart';
-import '../../presentation/screens/habits/add_habit_screen.dart';
-import '../../presentation/screens/habits/habit_detail_screen.dart';
-import '../../presentation/screens/calendar/calendar_screen.dart';
-import '../../presentation/screens/reports/reports_list_screen.dart';
-import '../../presentation/screens/reports/report_detail_screen.dart';
-import '../../presentation/screens/revisions/revision_suggestions_screen.dart';
-import '../../presentation/screens/settings/settings_screen.dart';
-import '../../presentation/screens/main/main_screen.dart';
+import 'package:habit_tracker/presentation/screens/splash/splash_screen.dart';
+import 'package:habit_tracker/presentation/screens/auth/login_screen.dart';
+import 'package:habit_tracker/presentation/screens/auth/register_screen.dart';
+import 'package:habit_tracker/presentation/screens/home/home_screen.dart';
+import 'package:habit_tracker/presentation/screens/habits/habits_list_screen.dart';
+import 'package:habit_tracker/presentation/screens/habits/add_habit_screen.dart';
+import 'package:habit_tracker/presentation/screens/habits/habit_detail_screen.dart';
+import 'package:habit_tracker/presentation/screens/calendar/calendar_screen.dart';
+import 'package:habit_tracker/presentation/screens/reports/reports_list_screen.dart';
+import 'package:habit_tracker/presentation/screens/reports/report_detail_screen.dart';
+import 'package:habit_tracker/presentation/screens/revisions/revision_suggestions_screen.dart';
+import 'package:habit_tracker/presentation/screens/settings/settings_screen.dart';
+import 'package:habit_tracker/presentation/screens/main/main_screen.dart';
 
 /// Route Names
 class AppRoutes {
@@ -123,3 +123,4 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ),
   );
 });
+

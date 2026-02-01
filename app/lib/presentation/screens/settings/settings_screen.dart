@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:habit_tracker/core/theme/app_colors.dart';
-import '../../widgets/common/app_button.dart';
+import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -449,4 +449,5 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 }
+
 
