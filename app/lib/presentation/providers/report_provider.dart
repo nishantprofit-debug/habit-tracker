@@ -82,15 +82,15 @@ class ReportsNotifier extends StateNotifier<ReportsState> {
           totalDaysTracked: 30,
           bestStreak: 21,
           aiSummary: 'Consistent performance across all categories. Focus on maintaining your evening meditation habit.',
-          achievements: [
+          achievements: const [
             'Started 2 new habits successfully',
             'Maintained productivity habits at 80%',
           ],
-          areasForImprovement: [
+          areasForImprovement: const [
             'Health category completion dropped',
             'Need to establish evening routine',
           ],
-          categoryStats: {
+          categoryStats: const {
             'health': 0.75,
             'learning': 0.70,
             'productivity': 0.80,
