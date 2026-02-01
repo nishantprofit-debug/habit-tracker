@@ -98,6 +98,14 @@ CREATE TABLE IF NOT EXISTS daily_logs (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(habit_id, log_date)
 );
+
+-- Ensure log_date exists if table was created without it
+DO $$ 
+BEGIN 
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='daily_logs' AND column_name='log_date') THEN
+        ALTER TABLE daily_logs ADD COLUMN log_date DATE NOT NULL DEFAULT CURRENT_DATE;
+    END IF;
+END $$;
 `
 
 const migrationCreateStreaksTable = `
@@ -112,6 +120,14 @@ CREATE TABLE IF NOT EXISTS streaks (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(habit_id)
 );
+
+-- Ensure last_completed_date exists
+DO $$ 
+BEGIN 
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='streaks' AND column_name='last_completed_date') THEN
+        ALTER TABLE streaks ADD COLUMN last_completed_date DATE;
+    END IF;
+END $$;
 `
 
 const migrationCreateReportsTable = `
@@ -127,6 +143,14 @@ CREATE TABLE IF NOT EXISTS reports (
     generated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, report_month)
 );
+
+-- Ensure report_month exists
+DO $$ 
+BEGIN 
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='reports' AND column_name='report_month') THEN
+        ALTER TABLE reports ADD COLUMN report_month DATE NOT NULL DEFAULT CURRENT_DATE;
+    END IF;
+END $$;
 `
 
 const migrationCreateRevisionHabitsTable = `
