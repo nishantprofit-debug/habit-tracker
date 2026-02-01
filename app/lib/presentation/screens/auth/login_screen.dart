@@ -204,7 +204,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: TextButton(
                     onPressed: () {
                       debugPrint('DEBUG [LoginScreen]: Forgot password tapped');
-                      // TODO: Navigate to forgot password
+                      if (_emailController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Please enter your email first')),
+                        );
+                        return;
+                      }
+                      
+                      // Trigger password reset
+                      try {
+                        // We use the Supabase client directly or add a method to AuthProvider
+                        // For simplicity, let's assume we can access it via a provider or directly here
+                        // Ideally, AuthNotifier should handle this.
+                         ref.read(authProvider.notifier).resetPassword(_emailController.text);
+                         
+                         ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Password reset email sent! Check your inbox.')),
+                        );
+                      } catch (e) {
+                         ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: $e')),
+                        );
+                      }
                     },
                     child: const Text(
                       'Forgot password?',

@@ -247,6 +247,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Reset password
+  Future<void> resetPassword(String email) async {
+    try {
+      await _supabase.auth.resetPasswordForEmail(email);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   /// Update user profile
   Future<bool> updateProfile({
     String? displayName,

@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habit_tracker/data/remote/api_client.dart';
 import 'package:habit_tracker/core/constants/api_endpoints.dart';
+import 'package:habit_tracker/core/services/notification_service.dart';
+import 'package:flutter/material.dart'; // For TimeOfDay string parsing helpers if needed
 import 'package:flutter/foundation.dart';
 
 import 'package:habit_tracker/data/models/habit_model.dart';
@@ -117,6 +119,11 @@ class HabitsNotifier extends StateNotifier<HabitsState> {
           isLoading: false,
           habits: [...state.habits, newHabit],
         );
+
+        // Schedule notification if reminder time is set
+        if (newHabit.reminderTime != null) {
+          _scheduleNotification(newHabit);
+        }
 
         return true;
       } else {
@@ -255,9 +262,40 @@ class HabitsNotifier extends StateNotifier<HabitsState> {
     state = state.copyWith(filterCategory: category);
   }
 
-  /// Clear error
   void clearError() {
     state = state.copyWith(error: null);
+  }
+
+  /// Helper to schedule notification
+  void _scheduleNotification(HabitModel habit) {
+    if (habit.reminderTime == null) return;
+
+    try {
+      // Parse "H:mm AM/PM" or "HH:mm"
+      final timeParts = habit.reminderTime!.split(' ');
+      final clockParts = timeParts[0].split(':');
+      int hour = int.parse(clockParts[0]);
+      final minute = int.parse(clockParts[1]);
+
+      if (timeParts.length > 1) {
+        // Handle AM/PM
+        final period = timeParts[1].toUpperCase();
+        if (period == 'PM' && hour < 12) {
+          hour += 12;
+        } else if (period == 'AM' && hour == 12) {
+          hour = 0;
+        }
+      }
+
+      NotificationService.instance.scheduleDailyReminder(
+        hour: hour,
+        minute: minute,
+        title: "Time for ${habit.title}!",
+        body: "Keep your streak going! Complete your habit now.",
+      );
+    } catch (e) {
+      debugPrint('Failed to schedule notification: $e');
+    }
   }
 }
 
