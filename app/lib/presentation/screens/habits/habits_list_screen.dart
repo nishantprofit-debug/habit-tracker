@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:habit_tracker/core/theme/app_colors.dart';
 import 'package:habit_tracker/presentation/widgets/common/app_text_field.dart';
 import 'package:habit_tracker/presentation/widgets/habit/habit_card.dart';
+import 'package:habit_tracker/data/models/habit_model.dart';
+import 'package:habit_tracker/presentation/providers/habit_provider.dart';
 
 class HabitsListScreen extends ConsumerStatefulWidget {
   const HabitsListScreen({super.key});
@@ -27,6 +29,11 @@ class _HabitsListScreenState extends ConsumerState<HabitsListScreen>
     _tabController.addListener(() {
       debugPrint('DEBUG [HabitsListScreen]: Tab changed to index ${_tabController.index} (${_tabController.index == 0 ? "Active" : "Archived"})');
     });
+
+    // Load habits on init
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(habitsProvider.notifier).loadHabits();
+    });
   }
 
   @override
@@ -38,6 +45,8 @@ class _HabitsListScreenState extends ConsumerState<HabitsListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final habitsState = ref.watch(habitsProvider);
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
@@ -62,38 +71,46 @@ class _HabitsListScreenState extends ConsumerState<HabitsListScreen>
           ],
         ),
       ),
-      body: Column(
-        children: [
-          // Search and Filter
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
+      body: habitsState.isLoading && habitsState.habits.isEmpty
+          ? const Center(child: CircularProgressIndicator(color: AppColors.black))
+          : Column(
               children: [
-                AppSearchField(
-                  controller: _searchController,
-                  hint: 'Search habits...',
-                  onChanged: (value) {
-                    setState(() {});
-                  },
+                // Search and Filter
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      AppSearchField(
+                        controller: _searchController,
+                        hint: 'Search habits...',
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      _buildCategoryFilter(),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 12),
-                _buildCategoryFilter(),
-              ],
-            ),
-          ),
 
-          // Habits List
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildHabitsList(active: true),
-                _buildHabitsList(active: false),
+                // Habits List
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildHabitsList(
+                        habits: habitsState.activeHabits,
+                        active: true,
+                      ),
+                      _buildHabitsList(
+                        habits: habitsState.archivedHabits,
+                        active: false,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           debugPrint('DEBUG [HabitsListScreen]: FAB tapped - Opening Add Habit screen');
@@ -153,11 +170,18 @@ class _HabitsListScreenState extends ConsumerState<HabitsListScreen>
     );
   }
 
-  Widget _buildHabitsList({required bool active}) {
-    // Sample data - will be replaced with actual data from providers
-    final habits = active ? _activeHabits : _archivedHabits;
+  Widget _buildHabitsList({
+    required List<HabitModel> habits,
+    required bool active,
+  }) {
+    // Filter by search and category
+    var filteredHabits = habits.where((h) {
+      final matchesSearch = h.title.toLowerCase().contains(_searchController.text.toLowerCase());
+      final matchesCategory = _selectedCategory == 'all' || h.category.name == _selectedCategory;
+      return matchesSearch && matchesCategory;
+    }).toList();
 
-    if (habits.isEmpty) {
+    if (filteredHabits.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -191,47 +215,36 @@ class _HabitsListScreenState extends ConsumerState<HabitsListScreen>
       );
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: habits.length,
-      itemBuilder: (context, index) {
-        final habit = habits[index];
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: HabitCard(
-            title: habit['title']!,
-            category: habit['category']!,
-            streak: int.parse(habit['streak']!),
-            isCompleted: habit['completed'] == 'true',
-            isLearningHabit: habit['category'] == 'learning',
-            onToggle: () {
-              debugPrint('DEBUG [HabitsListScreen]: Habit toggled - ${habit['title']}');
-              // Toggle habit completion
-            },
-            onTap: () {
-              debugPrint('DEBUG [HabitsListScreen]: Habit tapped - ${habit['title']} (id: ${habit['id']})');
-              context.push('/habits/${habit['id']}');
-            },
-          ),
-        );
-      },
+    return RefreshIndicator(
+      onRefresh: () => ref.read(habitsProvider.notifier).loadHabits(),
+      color: AppColors.black,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: filteredHabits.length,
+        itemBuilder: (context, index) {
+          final habit = filteredHabits[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: HabitCard(
+              title: habit.title,
+              category: habit.category.name,
+              streak: habit.currentStreak,
+              isCompleted: habit.todayCompleted,
+              isLearningHabit: habit.isLearningHabit,
+              onToggle: () {
+                debugPrint('DEBUG [HabitsListScreen]: Habit toggled - ${habit.title}');
+                ref.read(habitsProvider.notifier).toggleCompletion(habit.id);
+              },
+              onTap: () {
+                debugPrint('DEBUG [HabitsListScreen]: Habit tapped - ${habit.title} (id: ${habit.id})');
+                context.push('/habits/${habit.id}');
+              },
+            ),
+          );
+        },
+      ),
     );
   }
-
-  // Sample data
-  final List<Map<String, String>> _activeHabits = [
-    {'id': '1', 'title': 'Morning Exercise', 'category': 'health', 'streak': '12', 'completed': 'true'},
-    {'id': '2', 'title': 'Read for 30 minutes', 'category': 'personal', 'streak': '5', 'completed': 'false'},
-    {'id': '3', 'title': 'Study Flutter', 'category': 'learning', 'streak': '15', 'completed': 'true'},
-    {'id': '4', 'title': 'Meditate', 'category': 'health', 'streak': '8', 'completed': 'true'},
-    {'id': '5', 'title': 'Practice algorithms', 'category': 'learning', 'streak': '7', 'completed': 'false'},
-    {'id': '6', 'title': 'Review daily goals', 'category': 'productivity', 'streak': '3', 'completed': 'false'},
-  ];
-
-  final List<Map<String, String>> _archivedHabits = [
-    {'id': '7', 'title': 'Wake up at 5am', 'category': 'personal', 'streak': '0', 'completed': 'false'},
-    {'id': '8', 'title': 'No social media', 'category': 'productivity', 'streak': '0', 'completed': 'false'},
-  ];
 }
 
 

@@ -40,16 +40,32 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // TODO: Implement Firebase Auth registration
-      await Future.delayed(const Duration(seconds: 1));
+      final success = await ref.read(authProvider.notifier).registerWithEmail(
+            _emailController.text,
+            _passwordController.text,
+            _nameController.text,
+          );
 
-      if (mounted) {
+      if (success && mounted) {
+        debugPrint('DEBUG [RegisterScreen]: Registration SUCCESS - Navigating to HOME');
         context.go(AppRoutes.home);
+      } else if (mounted) {
+        final error = ref.read(authProvider).error ?? 'Registration failed';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } catch (e) {
+      debugPrint('DEBUG [RegisterScreen]: Registration FAILED - Error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed: $e')),
+          SnackBar(
+            content: Text('Registration failed: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } finally {

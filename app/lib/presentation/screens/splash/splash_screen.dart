@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habit_tracker/core/constants/app_constants.dart';
 import 'package:habit_tracker/core/router/app_router.dart';
 import 'package:habit_tracker/core/theme/app_colors.dart';
+import 'package:habit_tracker/presentation/providers/auth_provider.dart';
 
 /// Splash Screen
 class SplashScreen extends ConsumerStatefulWidget {
@@ -45,22 +46,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   void _checkAuthStatus() {
     debugPrint('DEBUG [SplashScreen]: Checking auth status...');
-    _navigationTimer = Timer(const Duration(seconds: 2), () async {
+    
+    // Use a minimum splash time of 2 seconds
+    final startTime = DateTime.now();
+    
+    Future.microtask(() async {
+      await ref.read(authProvider.notifier).initialize();
+      
+      final elapsed = DateTime.now().difference(startTime);
+      if (elapsed < const Duration(seconds: 2)) {
+        await Future.delayed(const Duration(seconds: 2) - elapsed);
+      }
+      
       if (!mounted) return;
+      
+      final isAuthenticated = ref.read(authProvider).isAuthenticated;
+      debugPrint('DEBUG [SplashScreen]: Is authenticated = $isAuthenticated');
 
-      final prefs = await SharedPreferences.getInstance();
-      if (!mounted) return;
-      final accessToken = prefs.getString(AppConstants.accessTokenKey);
-      debugPrint('DEBUG [SplashScreen]: Token exists = ${accessToken != null && accessToken.isNotEmpty}');
-
-      if (accessToken != null && accessToken.isNotEmpty) {
-        // User is logged in
+      if (isAuthenticated) {
         debugPrint('DEBUG [SplashScreen]: >>> Navigating to HOME');
-        if (mounted) context.go(AppRoutes.home);
+        context.go(AppRoutes.home);
       } else {
-        // User needs to login
         debugPrint('DEBUG [SplashScreen]: >>> Navigating to LOGIN');
-        if (mounted) context.go(AppRoutes.login);
+        context.go(AppRoutes.login);
       }
     });
   }

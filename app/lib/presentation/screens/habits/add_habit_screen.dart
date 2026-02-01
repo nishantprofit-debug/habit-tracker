@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:habit_tracker/core/theme/app_colors.dart';
 import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
 import 'package:habit_tracker/presentation/widgets/common/app_text_field.dart';
+import 'package:habit_tracker/data/models/habit_model.dart';
+import 'package:habit_tracker/presentation/providers/habit_provider.dart';
 
 class AddHabitScreen extends ConsumerStatefulWidget {
   const AddHabitScreen({super.key});
@@ -458,39 +460,51 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
     }
   }
 
-  void _createHabit() {
+  Future<void> _createHabit() async {
     debugPrint('DEBUG [AddHabitScreen]: Create Habit button tapped');
-    debugPrint('DEBUG [AddHabitScreen]: Title = ${_titleController.text}');
-    debugPrint('DEBUG [AddHabitScreen]: Category = $_selectedCategory, Frequency = $_selectedFrequency');
-    debugPrint('DEBUG [AddHabitScreen]: IsLearning = $_isLearningHabit, Color = $_selectedColor');
 
-    if (_formKey.currentState!.validate()) {
-      debugPrint('DEBUG [AddHabitScreen]: Form validation PASSED');
-      // TODO: Implement habit creation with provider
-      final habit = {
-        'title': _titleController.text,
-        'description': _descriptionController.text,
-        'category': _selectedCategory,
-        'frequency': _selectedFrequency,
-        'isLearningHabit': _isLearningHabit,
-        'color': _selectedColor,
-        'icon': _selectedIcon,
-        'reminderTime': _reminderTime?.toString(),
-      };
-      debugPrint('DEBUG [AddHabitScreen]: Habit data = $habit');
+    if (!_formKey.currentState!.validate()) {
+      debugPrint('DEBUG [AddHabitScreen]: Form validation FAILED');
+      return;
+    }
 
-      // Show success and navigate back
+    debugPrint('DEBUG [AddHabitScreen]: Form validation PASSED');
+
+    final habitRequest = HabitModel(
+      id: '', // Server will assign ID
+      userId: '', // Server will assign current user ID
+      title: _titleController.text,
+      description: _descriptionController.text.isNotEmpty
+          ? _descriptionController.text
+          : null,
+      category: HabitCategory.fromString(_selectedCategory),
+      frequency: HabitFrequency.fromString(_selectedFrequency),
+      isLearningHabit: _isLearningHabit,
+      color: _selectedColor,
+      icon: _selectedIcon,
+      reminderTime: _reminderTime != null ? _formatTime(_reminderTime!) : null,
+      createdAt: DateTime.now(),
+    );
+
+    final success = await ref.read(habitsProvider.notifier).createHabit(habitRequest);
+
+    if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Habit created successfully'),
-          backgroundColor: AppColors.grey900,
+          backgroundColor: Colors.green,
         ),
       );
-
       debugPrint('DEBUG [AddHabitScreen]: Navigating back');
       context.pop();
-    } else {
-      debugPrint('DEBUG [AddHabitScreen]: Form validation FAILED');
+    } else if (mounted) {
+      final error = ref.read(habitsProvider).error ?? 'Failed to create habit';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:habit_tracker/core/theme/app_colors.dart';
 import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
+import 'package:habit_tracker/presentation/providers/auth_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -171,7 +172,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               child: Padding(
                 padding: EdgeInsets.only(bottom: 32),
                 child: Text(
-                  'Version 1.0.0',
+                   'Version 1.0.0',
                   style: TextStyle(
                     fontSize: 13,
                     color: AppColors.grey400,
@@ -186,6 +187,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Widget _buildProfileSection() {
+    final user = ref.watch(currentUserProvider);
+    
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -197,29 +200,34 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               color: AppColors.grey200,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.person,
-              color: AppColors.grey500,
-              size: 32,
-            ),
+            child: user?.avatarUrl != null 
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(32),
+                  child: Image.network(user!.avatarUrl!, fit: BoxFit.cover),
+                )
+              : const Icon(
+                  Icons.person,
+                  color: AppColors.grey500,
+                  size: 32,
+                ),
           ),
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'John Doe',
-                  style: TextStyle(
+                  user?.displayName ?? 'User',
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: AppColors.grey900,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  'john.doe@example.com',
-                  style: TextStyle(
+                  user?.email ?? 'No email',
+                  style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.grey500,
                   ),
@@ -265,12 +273,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       leading: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: isDestructive ? AppColors.grey100 : AppColors.grey100,
+          color: AppColors.grey100,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(
           icon,
-          color: isDestructive ? AppColors.grey600 : AppColors.grey600,
+          color: AppColors.grey600,
           size: 22,
         ),
       ),
@@ -279,7 +287,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w500,
-          color: isDestructive ? AppColors.grey600 : AppColors.grey900,
+          color: isDestructive ? Colors.red : AppColors.grey900,
         ),
       ),
       subtitle: subtitle != null
@@ -416,7 +424,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // Clear data
+              // Clear data logic would go here
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Delete All'),
@@ -432,7 +440,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Sign Out'),
         content: const Text(
-          'Are you sure you want to sign out? Your data will be synced before signing out.',
+          'Are you sure you want to sign out?',
         ),
         actions: [
           TextButton(
@@ -440,9 +448,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              context.go('/login');
+              await ref.read(authProvider.notifier).signOut();
+              if (mounted) {
+                context.go('/login');
+              }
             },
             child: const Text('Sign Out'),
           ),
@@ -451,5 +462,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 }
+
 
 

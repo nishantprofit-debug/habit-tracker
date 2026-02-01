@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:habit_tracker/core/theme/app_colors.dart';
 import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
+import 'package:habit_tracker/data/models/habit_model.dart';
+import 'package:habit_tracker/presentation/providers/habit_provider.dart';
 
 class HabitDetailScreen extends ConsumerStatefulWidget {
   final String habitId;
@@ -18,33 +20,41 @@ class HabitDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
-  // Sample data - will be replaced with actual data from providers
-  final Map<String, dynamic> _habit = {
-    'id': '1',
-    'title': 'Morning Exercise',
-    'description': 'Start the day with 30 minutes of exercise',
-    'category': 'health',
-    'frequency': 'daily',
-    'isLearningHabit': false,
-    'currentStreak': 12,
-    'longestStreak': 28,
-    'completionRate': 0.85,
-    'totalCompletions': 156,
-    'createdAt': '2024-01-15',
-  };
+  // Get habit from provider
+  HabitModel? get _habit {
+    final habits = ref.watch(habitsProvider).habits;
+    try {
+      return habits.firstWhere((h) => h.id == widget.habitId);
+    } catch (_) {
+      return null;
+    }
+  }
 
-  final List<Map<String, dynamic>> _weeklyData = [
-    {'day': 'Mon', 'completed': true},
-    {'day': 'Tue', 'completed': true},
-    {'day': 'Wed', 'completed': false},
-    {'day': 'Thu', 'completed': true},
-    {'day': 'Fri', 'completed': true},
-    {'day': 'Sat', 'completed': true},
-    {'day': 'Sun', 'completed': false},
-  ];
+  // Helper to format date
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
+  }
 
   @override
   Widget build(BuildContext context) {
+    final habit = _habit;
+
+    if (habit == null) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.grey900),
+            onPressed: () => context.pop(),
+          ),
+        ),
+        body: const Center(
+          child: Text('Habit not found'),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
@@ -58,7 +68,11 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
           IconButton(
             icon: const Icon(Icons.edit_outlined, color: AppColors.grey700),
             onPressed: () {
-              // Navigate to edit screen
+              // Navigate to edit screen - pass habit object or ID
+              // context.push('/habits/edit/${habit.id}');
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Edit feature coming soon!')),
+              );
             },
           ),
           PopupMenuButton<String>(
@@ -66,21 +80,21 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
             onSelected: (value) {
               switch (value) {
                 case 'archive':
-                  _archiveHabit();
+                  _archiveHabit(habit);
                   break;
                 case 'delete':
-                  _deleteHabit();
+                  _deleteHabit(habit);
                   break;
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'archive',
                 child: Row(
                   children: [
-                    Icon(Icons.archive_outlined, color: AppColors.grey600),
-                    SizedBox(width: 12),
-                    Text('Archive'),
+                    const Icon(Icons.archive_outlined, color: AppColors.grey600),
+                    const SizedBox(width: 12),
+                    Text(habit.isActive ? 'Archive' : 'Unarchive'),
                   ],
                 ),
               ),
@@ -116,8 +130,8 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
                           color: AppColors.grey100,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(
-                          Icons.fitness_center,
+                        child: Icon(
+                          _getIconData(habit.icon),
                           size: 28,
                           color: AppColors.grey900,
                         ),
@@ -128,7 +142,7 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _habit['title'],
+                              habit.title,
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -136,16 +150,16 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            _buildCategoryChip(_habit['category']),
+                            _buildCategoryChip(habit.category.displayName),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  if (_habit['description'] != null) ...[
+                  if (habit.description != null && habit.description!.isNotEmpty) ...[
                     const SizedBox(height: 16),
                     Text(
-                      _habit['description'],
+                      habit.description!,
                       style: const TextStyle(
                         fontSize: 15,
                         color: AppColors.grey600,
@@ -165,7 +179,7 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
                   Expanded(
                     child: _buildStatCard(
                       'Current Streak',
-                      '${_habit['currentStreak']}',
+                      '${habit.currentStreak}',
                       'days',
                       Icons.local_fire_department,
                     ),
@@ -174,7 +188,7 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
                   Expanded(
                     child: _buildStatCard(
                       'Best Streak',
-                      '${_habit['longestStreak']}',
+                      '${habit.longestStreak}',
                       'days',
                       Icons.emoji_events_outlined,
                     ),
@@ -189,83 +203,63 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
                 children: [
                   Expanded(
                     child: _buildStatCard(
-                      'Completion Rate',
-                      '${(_habit['completionRate'] * 100).toInt()}%',
+                      'Frequency',
+                      habit.frequency.displayName,
                       null,
-                      Icons.pie_chart_outline,
+                      Icons.repeat,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: _buildStatCard(
-                      'Total Completions',
-                      '${_habit['totalCompletions']}',
-                      'times',
-                      Icons.check_circle_outline,
+                      'Status',
+                       habit.isActive ? 'Active' : 'Archived',
+                      null,
+                      habit.isActive ? Icons.check_circle_outline : Icons.archive_outlined,
                     ),
                   ),
                 ],
               ),
             ),
 
-            // This Week
-            const SizedBox(height: 32),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'This Week',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.grey900,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildWeeklyProgress(),
-                ],
-              ),
-            ),
-
-            // Monthly Calendar
-            const SizedBox(height: 32),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Monthly Overview',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.grey900,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildMonthlyCalendar(),
-                ],
-              ),
-            ),
-
+            // This Week - Placeholder for now as we need history data
+            // To properly implement this we'd need a separate endpoint for habit history
+            
             const SizedBox(height: 32),
 
             // Action Buttons
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: AppButton(
-                child: const Text('Mark as Complete Today'),
-                onPressed: () {
-                  // Mark habit as complete
-                },
+            if (habit.isActive)
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: AppButton(
+                  child: Text(habit.todayCompleted ? 'Mark as Incomplete' : 'Mark as Complete Today'),
+                  backgroundColor: habit.todayCompleted ? AppColors.grey300 : AppColors.black,
+                  textColor: habit.todayCompleted ? AppColors.black : AppColors.white,
+                  onPressed: () {
+                    _toggleCompletion(habit);
+                  },
+                ),
               ),
-            ),
           ],
         ),
       ),
     );
+  }
+
+  // Helper to map string icon name to IconData (simplified)
+  IconData _getIconData(String iconName) {
+    switch (iconName) {
+      case 'fitness_center': return Icons.fitness_center;
+      case 'book': return Icons.book;
+      case 'work': return Icons.work;
+      case 'water_drop': return Icons.water_drop;
+      case 'restaurant': return Icons.restaurant;
+      case 'school': return Icons.school; 
+      case 'code': return Icons.code; 
+      case 'spa': return Icons.spa;
+      // Add more valid icon checks
+      default: return Icons.check;
+    }
   }
 
   Widget _buildCategoryChip(String category) {
@@ -307,7 +301,7 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
               Text(
                 value,
                 style: const TextStyle(
-                  fontSize: 28,
+                  fontSize: 20, // Reduced font size slightly to fit
                   fontWeight: FontWeight.bold,
                   color: AppColors.grey900,
                 ),
@@ -317,7 +311,7 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
                 Text(
                   unit,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: AppColors.grey500,
                   ),
                 ),
@@ -337,130 +331,27 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
     );
   }
 
-  Widget _buildWeeklyProgress() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: _weeklyData.map((day) {
-        return Column(
-          children: [
-            Text(
-              day['day'],
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppColors.grey500,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: day['completed'] ? AppColors.black : AppColors.grey100,
-                borderRadius: BorderRadius.circular(10),
-                border: day['completed']
-                    ? null
-                    : Border.all(color: AppColors.grey300),
-              ),
-              child: day['completed']
-                  ? const Icon(Icons.check, color: AppColors.white, size: 20)
-                  : null,
-            ),
-          ],
-        );
-      }).toList(),
-    );
+  Future<void> _toggleCompletion(HabitModel habit) async {
+    final success = await ref.read(habitsProvider.notifier).toggleCompletion(habit.id);
+    if (success && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(habit.todayCompleted ? 'Marked as incomplete' : 'Marked as complete!'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+    }
   }
 
-  Widget _buildMonthlyCalendar() {
-    final now = DateTime.now();
-    final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
-    final firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final startingWeekday = firstDayOfMonth.weekday;
-
-    // Sample completion data
-    final completedDays = {1, 2, 3, 5, 6, 8, 9, 10, 12, 15, 16, 17, 19, 20, 22, 23, 24, 26, 27};
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.grey50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.grey200),
-      ),
-      child: Column(
-        children: [
-          // Weekday headers
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-                .map((d) => SizedBox(
-                      width: 36,
-                      child: Center(
-                        child: Text(
-                          d,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.grey500,
-                          ),
-                        ),
-                      ),
-                    ))
-                .toList(),
-          ),
-          const SizedBox(height: 8),
-          // Calendar grid
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 7,
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-            ),
-            itemCount: 42,
-            itemBuilder: (context, index) {
-              final dayNumber = index - startingWeekday + 2;
-              if (dayNumber < 1 || dayNumber > daysInMonth) {
-                return const SizedBox();
-              }
-
-              final isCompleted = completedDays.contains(dayNumber);
-              final isToday = dayNumber == now.day;
-
-              return Container(
-                decoration: BoxDecoration(
-                  color: isCompleted ? AppColors.grey900 : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                  border: isToday && !isCompleted
-                      ? Border.all(color: AppColors.grey400, width: 2)
-                      : null,
-                ),
-                child: Center(
-                  child: Text(
-                    '$dayNumber',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: isToday ? FontWeight.w600 : FontWeight.normal,
-                      color: isCompleted ? AppColors.white : AppColors.grey700,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _archiveHabit() {
+  void _archiveHabit(HabitModel habit) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Archive Habit'),
-        content: const Text(
-          'Are you sure you want to archive this habit? You can restore it later.',
+        title: Text(habit.isActive ? 'Archive Habit' : 'Unarchive Habit'),
+        content: Text(
+          habit.isActive 
+          ? 'Are you sure you want to archive this habit? It will be moved to the archived tab.'
+          : 'Are you sure you want to unarchive this habit?'
         ),
         actions: [
           TextButton(
@@ -468,19 +359,36 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Archive habit
-              context.pop();
+            onPressed: () async {
+              Navigator.pop(context); // Close dialog
+              
+              bool success = false;
+              if (habit.isActive) {
+                success = await ref.read(habitsProvider.notifier).deactivateHabit(habit.id);
+              } else {
+                // We need a restore/activate habit method in provider, simpler to just update habit with isActive=true
+                // But for now, let's assume deactivateHabit toggle or create a separate one. 
+                // Let's assume we implement a re-activate path. 
+                // For now, let's just use updateHabit to set isActive = true
+                 final updatedHabit = habit.copyWith(isActive: true);
+                 success = await ref.read(habitsProvider.notifier).updateHabit(updatedHabit);
+              }
+
+              if (success && mounted) {
+                 ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(habit.isActive ? 'Habit archived' : 'Habit restored')),
+                 );
+                 context.pop(); // Go back to list
+              }
             },
-            child: const Text('Archive'),
+            child: Text(habit.isActive ? 'Archive' : 'Restore'),
           ),
         ],
       ),
     );
   }
 
-  void _deleteHabit() {
+  void _deleteHabit(HabitModel habit) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -494,10 +402,16 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              // Delete habit
-              context.pop();
+              final success = await ref.read(habitsProvider.notifier).deleteHabit(habit.id);
+              
+              if (success && mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Habit deleted')),
+                );
+                context.pop();
+              }
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Delete'),

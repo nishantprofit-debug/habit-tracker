@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:habit_tracker/core/theme/app_colors.dart';
 import 'package:habit_tracker/core/router/app_router.dart';
 import 'package:habit_tracker/presentation/providers/habit_provider.dart';
+import 'package:habit_tracker/presentation/providers/auth_provider.dart';
 import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
 import 'package:habit_tracker/presentation/widgets/habit/habit_card.dart';
 import 'package:habit_tracker/presentation/widgets/gamification/level_progress.dart';
@@ -236,6 +237,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildGreeting() {
+    final user = ref.watch(currentUserProvider);
+    final name = user?.displayName ?? 'User';
     final hour = DateTime.now().hour;
     String greeting;
     if (hour < 12) {
@@ -257,9 +260,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         const SizedBox(height: 4),
-        const Text(
-          'Ready to build habits?',
-          style: TextStyle(
+        Text(
+          'Ready to build habits, $name?',
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: AppColors.grey900,

@@ -1,4 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habit_tracker/data/remote/api_client.dart';
+import 'package:habit_tracker/core/constants/api_endpoints.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:habit_tracker/data/models/habit_model.dart';
 
@@ -57,6 +59,8 @@ class HabitsState {
 
 /// Habits notifier
 class HabitsNotifier extends StateNotifier<HabitsState> {
+  final ApiClient _apiClient = ApiClient.instance;
+
   HabitsNotifier() : super(const HabitsState());
 
   /// Load all habits
@@ -64,17 +68,21 @@ class HabitsNotifier extends StateNotifier<HabitsState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      // TODO: Load from API and local database
-      // For now, start with an empty list - users will create their own habits
-      await Future.delayed(const Duration(milliseconds: 500));
+      final response = await _apiClient.get(ApiEndpoints.habits);
+      
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        final habits = data.map((json) => HabitModel.fromJson(json)).toList();
 
-      final habits = <HabitModel>[];
-
-      state = state.copyWith(
-        isLoading: false,
-        habits: habits,
-      );
+        state = state.copyWith(
+          isLoading: false,
+          habits: habits,
+        );
+      } else {
+        throw Exception('Failed to load habits: ${response.data['message']}');
+      }
     } catch (e) {
+      debugPrint('Load habits error: $e');
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
@@ -87,23 +95,34 @@ class HabitsNotifier extends StateNotifier<HabitsState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      // TODO: Save to API and local database
-
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      final newHabit = habit.copyWith(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+      final response = await _apiClient.post(
+        ApiEndpoints.habits,
+        data: {
+          'title': habit.title,
+          'description': habit.description,
+          'category': habit.category.name,
+          'frequency': habit.frequency.name,
+          'is_learning_habit': habit.isLearningHabit,
+          'color': habit.color,
+          'icon': habit.icon,
+          'reminder_time': habit.reminderTime,
+        },
       );
 
-      state = state.copyWith(
-        isLoading: false,
-        habits: [...state.habits, newHabit],
-      );
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        final newHabit = HabitModel.fromJson(response.data);
 
-      return true;
+        state = state.copyWith(
+          isLoading: false,
+          habits: [...state.habits, newHabit],
+        );
+
+        return true;
+      } else {
+        throw Exception('Failed to create habit: ${response.data['message']}');
+      }
     } catch (e) {
+      debugPrint('Create habit error: $e');
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
@@ -117,23 +136,29 @@ class HabitsNotifier extends StateNotifier<HabitsState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      // TODO: Update via API and local database
-
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      final updatedHabit = habit.copyWith(updatedAt: DateTime.now());
-
-      final habits = state.habits.map((h) {
-        return h.id == habit.id ? updatedHabit : h;
-      }).toList();
-
-      state = state.copyWith(
-        isLoading: false,
-        habits: habits,
+      final response = await _apiClient.put(
+        ApiEndpoints.habit(habit.id),
+        data: habit.toJson(),
       );
 
-      return true;
+      if (response.statusCode == 200) {
+        final updatedHabit = HabitModel.fromJson(response.data);
+
+        final habits = state.habits.map((h) {
+          return h.id == updatedHabit.id ? updatedHabit : h;
+        }).toList();
+
+        state = state.copyWith(
+          isLoading: false,
+          habits: habits,
+        );
+
+        return true;
+      } else {
+        throw Exception('Failed to update habit: ${response.data['message']}');
+      }
     } catch (e) {
+      debugPrint('Update habit error: $e');
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
@@ -145,64 +170,55 @@ class HabitsNotifier extends StateNotifier<HabitsState> {
   /// Toggle habit completion for today
   Future<bool> toggleCompletion(String habitId) async {
     try {
-      // TODO: Save to API and local database
+      final response = await _apiClient.post(ApiEndpoints.quickComplete(habitId));
 
-      final habits = state.habits.map((h) {
-        if (h.id == habitId) {
-          return h.copyWith(
-            todayCompleted: !h.todayCompleted,
-            currentStreak: h.todayCompleted ? h.currentStreak - 1 : h.currentStreak + 1,
-            updatedAt: DateTime.now(),
-          );
-        }
-        return h;
-      }).toList();
+      if (response.statusCode == 200) {
+        // Update local state
+        final habits = state.habits.map((h) {
+          if (h.id == habitId) {
+            // Backend returns updated user habit log or something similar? 
+            // For now, toggle locally based on previous state
+            return h.copyWith(
+              todayCompleted: !h.todayCompleted,
+              currentStreak: h.todayCompleted ? h.currentStreak - 1 : h.currentStreak + 1,
+              updatedAt: DateTime.now(),
+            );
+          }
+          return h;
+        }).toList();
 
-      state = state.copyWith(habits: habits);
-
-      return true;
+        state = state.copyWith(habits: habits);
+        return true;
+      } else {
+        throw Exception('Failed to toggle completion: ${response.data['message']}');
+      }
     } catch (e) {
+      debugPrint('Toggle completion error: $e');
       state = state.copyWith(error: e.toString());
       return false;
     }
   }
 
-  /// Archive a habit
-  Future<bool> archiveHabit(String habitId) async {
+  /// Archive/Deactivate a habit
+  Future<bool> deactivateHabit(String habitId) async {
     try {
-      // TODO: Update via API and local database
+      final response = await _apiClient.put(
+        ApiEndpoints.habit(habitId),
+        data: {'is_active': false},
+      );
 
-      final habits = state.habits.map((h) {
-        if (h.id == habitId) {
-          return h.copyWith(isActive: false, updatedAt: DateTime.now());
-        }
-        return h;
-      }).toList();
+      if (response.statusCode == 200) {
+        final habits = state.habits.map((h) {
+          if (h.id == habitId) {
+            return h.copyWith(isActive: false, updatedAt: DateTime.now());
+          }
+          return h;
+        }).toList();
 
-      state = state.copyWith(habits: habits);
-
-      return true;
-    } catch (e) {
-      state = state.copyWith(error: e.toString());
+        state = state.copyWith(habits: habits);
+        return true;
+      }
       return false;
-    }
-  }
-
-  /// Restore an archived habit
-  Future<bool> restoreHabit(String habitId) async {
-    try {
-      // TODO: Update via API and local database
-
-      final habits = state.habits.map((h) {
-        if (h.id == habitId) {
-          return h.copyWith(isActive: true, updatedAt: DateTime.now());
-        }
-        return h;
-      }).toList();
-
-      state = state.copyWith(habits: habits);
-
-      return true;
     } catch (e) {
       state = state.copyWith(error: e.toString());
       return false;
@@ -211,15 +227,24 @@ class HabitsNotifier extends StateNotifier<HabitsState> {
 
   /// Delete a habit permanently
   Future<bool> deleteHabit(String habitId) async {
+    state = state.copyWith(isLoading: true, error: null);
     try {
-      // TODO: Delete via API and local database
+      final response = await _apiClient.delete(ApiEndpoints.habit(habitId));
 
-      final habits = state.habits.where((h) => h.id != habitId).toList();
-      state = state.copyWith(habits: habits);
-
-      return true;
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        final habits = state.habits.where((h) => h.id != habitId).toList();
+        state = state.copyWith(
+          isLoading: false,
+          habits: habits,
+        );
+        return true;
+      }
+      return false;
     } catch (e) {
-      state = state.copyWith(error: e.toString());
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
       return false;
     }
   }

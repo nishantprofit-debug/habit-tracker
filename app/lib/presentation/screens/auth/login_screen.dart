@@ -38,7 +38,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _handleLogin() async {
     debugPrint('DEBUG [LoginScreen]: Login button tapped');
-    debugPrint('DEBUG [LoginScreen]: Email = ${_emailController.text}');
 
     if (!_formKey.currentState!.validate()) {
       debugPrint('DEBUG [LoginScreen]: Form validation FAILED');
@@ -49,19 +48,67 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // TODO: Implement Firebase Auth login
-      debugPrint('DEBUG [LoginScreen]: Attempting login...');
-      await Future.delayed(const Duration(seconds: 1));
+      final success = await ref.read(authProvider.notifier).signInWithEmail(
+            _emailController.text,
+            _passwordController.text,
+          );
 
-      if (mounted) {
+      if (success && mounted) {
         debugPrint('DEBUG [LoginScreen]: Login SUCCESS - Navigating to HOME');
         context.go(AppRoutes.home);
+      } else if (mounted) {
+        final error = ref.read(authProvider).error ?? 'Login failed';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } catch (e) {
       debugPrint('DEBUG [LoginScreen]: Login FAILED - Error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed: $e')),
+          SnackBar(
+            content: Text('Login failed: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    debugPrint('DEBUG [LoginScreen]: Google Sign In tapped');
+    setState(() => _isLoading = true);
+    
+    try {
+      final success = await ref.read(authProvider.notifier).signInWithGoogle();
+      
+      if (success && mounted) {
+        debugPrint('DEBUG [LoginScreen]: Google Login SUCCESS - Navigating to HOME');
+        context.go(AppRoutes.home);
+      } else if (mounted) {
+        final error = ref.read(authProvider).error ?? 'Google login failed';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('DEBUG [LoginScreen]: Google Login FAILED - Error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Google login failed: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } finally {
@@ -198,10 +245,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 // Google Sign In
                 AppButton.outlined(
-                  onPressed: () {
-                    debugPrint('DEBUG [LoginScreen]: Google Sign In tapped');
-                    // TODO: Implement Google Sign In
-                  },
+                  onPressed: _handleGoogleSignIn,
+                  isLoading: _isLoading,
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
