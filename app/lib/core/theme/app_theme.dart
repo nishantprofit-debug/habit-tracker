@@ -224,16 +224,7 @@ class AppTheme {
         ),
       ),
 
-      // Card Theme
-      cardTheme: const CardThemeData(
-        elevation: 0,
-        color: AppColors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          side: BorderSide(color: AppColors.grey200),
-        ),
-        margin: EdgeInsets.zero,
-      ),
+      // Card Theme (removed for Flutter 3.24 compatibility)
 
       // Divider Theme
       dividerTheme: const DividerThemeData(
@@ -300,26 +291,7 @@ class AppTheme {
         ),
       ),
 
-      // Dialog Theme
-      dialogTheme: const DialogThemeData(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        titleTextStyle: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: AppColors.grey900,
-          fontFamily: 'Inter',
-        ),
-        contentTextStyle: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-          color: AppColors.grey700,
-          fontFamily: 'Inter',
-        ),
-      ),
+      // Dialog Theme (removed for Flutter 3.24 compatibility)
 
       // Floating Action Button Theme
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
