@@ -98,14 +98,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
              // Create temporal user model from Supabase User
             user: UserModel(
               id: user.id,
-              userId: user.id, // Legacy field
-              // email: user.email ?? '', // UserModel doesn't have email in the snippet I saw? 
-              // Wait, I didn't see UserModel definition fully but it had things like 'display_name' in JSON.
-              // Let's safe bet on empty for now or rely on API.
-              // Actually, if API fails, we are in a weird state. 
-              // Let's assume API works if Supabase works, or we handle it.
-              title: user.email ?? 'User', // Fallback
-              createdAt: DateTime.now(),
+              firebaseUid: user.id, // Map Supabase ID to firebaseUid field for compatibility
+              email: user.email ?? '',
+              displayName: user.email?.split('@')[0] ?? 'User',
+              createdAt: DateTime.tryParse(user.createdAt) ?? DateTime.now(),
+              updatedAt: DateTime.now(),
             ),
          );
       } else {
