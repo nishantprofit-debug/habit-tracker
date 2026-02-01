@@ -31,8 +31,8 @@ void main() async {
   debugPrint('DEBUG: Initializing Supabase...');
   try {
     await Supabase.initialize(
-      url: dotenv.env['SUPABASE_URL'] ?? '',
-      anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
+      url: dotenv.env['SUPABASE_URL'] ?? 'https://cwjcfsnpqiyzluybmwxc.supabase.co',
+      anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3amNmc25wcWl5emx1eWJtd3hjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NjEzMzAsImV4cCI6MjA4NTQzNzMzMH0.osaCK27a1ZlE6XUeEMTrKKpZH2o0uPtz2byslRCaz9s',
     );
     debugPrint('DEBUG: ✓ Supabase initialized successfully');
   } catch (e) {

@@ -11,6 +11,7 @@ class ApiEndpoints {
   static const String supabaseAuth = '$supabaseUrl/auth/v1';
   
   // Backend API URL (Go server on Render)
+  // Note: Check if the server is awake. Render free tier spins down after inactivity.
   static const String baseUrl = 'https://habit-tracker-s7er.onrender.com/api/v1';
 
   // Auth
