@@ -16,7 +16,7 @@ class HabitTrackerApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
 
     // Listen for auth errors
-    ref.listen(authProvider, (previous, next) {
+    ref.listen<AuthState>(authProvider, (previous, next) {
       if (next.error != null && next.error != previous?.error) {
         scaffoldMessengerKey.currentState?.showSnackBar(
           SnackBar(
@@ -28,7 +28,7 @@ class HabitTrackerApp extends ConsumerWidget {
     });
 
     // Listen for habits errors
-    ref.listen(habitsProvider, (previous, next) {
+    ref.listen<HabitsState>(habitsProvider, (previous, next) {
       if (next.error != null && next.error != previous?.error) {
         scaffoldMessengerKey.currentState?.showSnackBar(
           SnackBar(

@@ -31,9 +31,6 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
   }
 
   // Helper to format date
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -232,12 +229,12 @@ class _HabitDetailScreenState extends ConsumerState<HabitDetailScreen> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: AppButton(
-                  child: Text(habit.todayCompleted ? 'Mark as Incomplete' : 'Mark as Complete Today'),
                   backgroundColor: habit.todayCompleted ? AppColors.grey300 : AppColors.black,
                   textColor: habit.todayCompleted ? AppColors.black : AppColors.white,
                   onPressed: () {
                     _toggleCompletion(habit);
                   },
+                  child: Text(habit.todayCompleted ? 'Mark as Incomplete' : 'Mark as Complete Today'),
                 ),
               ),
           ],

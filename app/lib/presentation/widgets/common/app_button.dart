@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/core/theme/app_colors.dart';
 
 /// Custom App Button with minimalist design
+/// Custom App Button with minimalist design
 class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget child;
@@ -11,6 +12,8 @@ class AppButton extends StatelessWidget {
   final double? width;
   final double height;
   final EdgeInsetsGeometry? padding;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   const AppButton({
     super.key,
@@ -21,6 +24,8 @@ class AppButton extends StatelessWidget {
     this.width,
     this.height = 52,
     this.padding,
+    this.backgroundColor,
+    this.textColor,
   });
 
   /// Create outlined button
@@ -32,6 +37,8 @@ class AppButton extends StatelessWidget {
     this.width,
     this.height = 52,
     this.padding,
+    this.backgroundColor,
+    this.textColor,
   }) : isOutlined = true;
 
   @override
@@ -45,6 +52,8 @@ class AppButton extends StatelessWidget {
           style: OutlinedButton.styleFrom(
             padding: padding,
             side: const BorderSide(color: AppColors.grey300),
+            backgroundColor: backgroundColor ?? Colors.transparent,
+            foregroundColor: textColor ?? AppColors.grey900,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -69,8 +78,8 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.black,
-          foregroundColor: AppColors.white,
+          backgroundColor: backgroundColor ?? AppColors.black,
+          foregroundColor: textColor ?? AppColors.white,
           disabledBackgroundColor: AppColors.grey300,
           disabledForegroundColor: AppColors.grey500,
           padding: padding,

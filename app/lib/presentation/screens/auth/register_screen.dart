@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:habit_tracker/core/router/app_router.dart';
 import 'package:habit_tracker/core/theme/app_colors.dart';
 import 'package:habit_tracker/presentation/widgets/common/app_button.dart';
+import 'package:habit_tracker/presentation/providers/auth_provider.dart';
 import 'package:habit_tracker/presentation/widgets/common/app_text_field.dart';
 
 /// Register Screen
